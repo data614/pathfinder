@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Job Search Launchpad</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Daily starting point</p>
+        <h1>Pathfinder job links</h1>
+        <p class="hero__subtitle">
+          Open the site and jump straight into curated analytics, sales, and
+          customer success searches across Sydney, Melbourne, and global remote
+          teams. Filters keep things tidy, and each card reminds you which CV to
+          lead with and the metrics to spotlight.
+        </p>
+        <div class="hero__meta">
+          <span>Last refreshed: <strong id="last-updated">—</strong></span>
+          <span>Time-saver: add this page to your browser bookmarks bar.</span>
+        </div>
+      </div>
+      <div class="hero__filters" role="toolbar" aria-label="Filter job links by location">
+        <button type="button" class="filter-button is-active" data-filter="all">
+          All locations
+        </button>
+        <button type="button" class="filter-button" data-filter="Sydney">
+          Sydney
+        </button>
+        <button type="button" class="filter-button" data-filter="Melbourne">
+          Melbourne
+        </button>
+        <button type="button" class="filter-button" data-filter="Remote">
+          Remote &amp; hybrid
+        </button>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="controls" aria-label="Search and quick tips">
+        <label class="search" for="search">
+          <span class="search__label">Search keywords</span>
+          <input
+            id="search"
+            type="search"
+            name="search"
+            placeholder="Filter by role, skill, or résumé"
+            autocomplete="off"
+          />
+        </label>
+        <aside class="tips">
+          <h2>Résumé &amp; cover-letter focus</h2>
+          <ul>
+            <li>
+              Lead with the <strong>Data Analyst CV</strong> for Power BI, BI, and
+              analytics postings. Mention your <em>$1M grant win</em>, Power BI
+              Premium deployments, and Jenkins/Redis automation.
+            </li>
+            <li>
+              Keep the <strong>Sales Representative CV</strong> ready for SDR and
+              inside-sales roles. Emphasise <em>20–30 calls/day</em>, a
+              <em>10% conversion rate</em>, and Salesforce/Xero mastery.
+            </li>
+            <li>
+              Use the <strong>Customer Service or IT Support CV</strong> for CX,
+              service desk, or QA opportunities. Highlight <em>high-NPS support</em>,
+              Salesforce data hygiene, and automation that reduced manual effort.
+            </li>
+            <li>
+              Reinforce <strong>Power BI Premium, Python, SQL, Power Automate,</strong>
+              and <strong>ServiceNow</strong> to capture ATS keywords across
+              postings.
+            </li>
+          </ul>
+        </aside>
+      </section>
+
+      <div class="results-meta" id="results-meta" aria-live="polite"></div>
+
+      <section class="job-grid" id="job-list" aria-live="polite" aria-busy="true">
+        <p class="loading">Loading job links…</p>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Tip: schedule two 25-minute outreach blocks per weekday and update the
+        résumé bullet that best matches the job focus before applying. This page
+        keeps the latest searches in one place so you can execute fast.
+      </p>
+    </footer>
+
+    <script src="assets/job-links.js"></script>
+    <script src="assets/script.js" defer></script>
+  </body>
+</html>
