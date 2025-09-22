@@ -46,6 +46,22 @@
 
     <main class="layout">
       <section class="controls" aria-label="Search and quick tips">
+        <div class="resume-upload">
+          <h2>Upload Your Resume</h2>
+          <div class="upload-area" id="upload-area">
+            <input type="file" id="resume-file" accept=".txt,.docx,.pdf" style="display: none;">
+            <label for="resume-file" class="upload-label">
+              📄 Click to upload your resume or drag & drop
+              <span class="upload-hint">Supports .txt, .docx, .pdf files</span>
+            </label>
+          </div>
+          <div id="resume-status" class="resume-status" style="display: none;"></div>
+          <div id="skills-selection" class="skills-selection" style="display: none;">
+            <h3>Select skills to emphasize in your cover letter:</h3>
+            <div id="skills-checkboxes" class="skills-grid"></div>
+            <button id="update-matches" class="btn-primary">Update Job Matches</button>
+          </div>
+        </div>
         <label class="search" for="search">
           <span class="search__label">Search keywords</span>
           <input
@@ -57,29 +73,35 @@
           />
         </label>
         <aside class="tips">
-          <h2>Résumé &amp; cover-letter focus</h2>
-          <ul>
-            <li>
-              Lead with the <strong>Data Analyst CV</strong> for Power BI, BI, and
-              analytics postings. Mention your <em>$1M grant win</em>, Power BI
-              Premium deployments, and Jenkins/Redis automation.
-            </li>
-            <li>
-              Keep the <strong>Sales Representative CV</strong> ready for SDR and
-              inside-sales roles. Emphasise <em>20–30 calls/day</em>, a
-              <em>10% conversion rate</em>, and Salesforce/Xero mastery.
-            </li>
-            <li>
-              Use the <strong>Customer Service or IT Support CV</strong> for CX,
-              service desk, or QA opportunities. Highlight <em>high-NPS support</em>,
-              Salesforce data hygiene, and automation that reduced manual effort.
-            </li>
-            <li>
-              Reinforce <strong>Power BI Premium, Python, SQL, Power Automate,</strong>
-              and <strong>ServiceNow</strong> to capture ATS keywords across
-              postings.
-            </li>
-          </ul>
+          <h2>AI-Powered Job Matching</h2>
+          <div id="cover-letter-tips">
+            <p>Upload your resume to get personalized job recommendations and cover letter guidance.</p>
+          </div>
+          <details>
+            <summary>Manual résumé & cover-letter focus</summary>
+            <ul>
+              <li>
+                Lead with the <strong>Data Analyst CV</strong> for Power BI, BI, and
+                analytics postings. Mention your <em>$1M grant win</em>, Power BI
+                Premium deployments, and Jenkins/Redis automation.
+              </li>
+              <li>
+                Keep the <strong>Sales Representative CV</strong> ready for SDR and
+                inside-sales roles. Emphasise <em>20–30 calls/day</em>, a
+                <em>10% conversion rate</em>, and Salesforce/Xero mastery.
+              </li>
+              <li>
+                Use the <strong>Customer Service or IT Support CV</strong> for CX,
+                service desk, or QA opportunities. Highlight <em>high-NPS support</em>,
+                Salesforce data hygiene, and automation that reduced manual effort.
+              </li>
+              <li>
+                Reinforce <strong>Power BI Premium, Python, SQL, Power Automate,</strong>
+                and <strong>ServiceNow</strong> to capture ATS keywords across
+                postings.
+              </li>
+            </ul>
+          </details>
         </aside>
       </section>
 
@@ -99,6 +121,7 @@
     </footer>
 
     <script src="assets/job-links.js"></script>
+    <script src="assets/resume-parser.js"></script>
     <script src="assets/script.js" defer></script>
   </body>
 </html>
