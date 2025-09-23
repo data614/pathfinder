@@ -1,5 +1,33 @@
 (function () {
-  const resumes = [
+  const normaliseText = (value) =>
+    typeof value === 'string' ? value.replace(/\s+/g, ' ').trim() : '';
+
+  const buildPromptProfile = (resume) => {
+    const focus = normaliseText(resume.focus);
+    const trimmedFocus = focus.length > 220 ? `${focus.slice(0, 217).trimEnd()}…` : focus;
+
+    const topHighlights = Array.isArray(resume.highlights)
+      ? resume.highlights.map((entry) => normaliseText(entry)).filter(Boolean).slice(0, 3)
+      : [];
+
+    const prioritySkills = Array.isArray(resume.skills)
+      ? resume.skills.map((skill) => normaliseText(skill).toLowerCase()).filter(Boolean).slice(0, 12)
+      : [];
+
+    const metrics = topHighlights.filter((highlight) => /[0-9%$€£]/.test(highlight));
+    const primaryMetrics = (metrics.length ? metrics : topHighlights).slice(0, 3);
+
+    return {
+      id: resume.id,
+      name: resume.name,
+      focus: trimmedFocus,
+      topHighlights,
+      prioritySkills,
+      primaryMetrics,
+    };
+  };
+
+  const baseResumes = [
     {
       id: 'data-analyst-cv',
       name: 'Data Analyst CV',
@@ -325,6 +353,11 @@
       ],
     },
   ];
+
+  const resumes = baseResumes.map((resume) => ({
+    ...resume,
+    promptProfile: buildPromptProfile(resume),
+  }));
 
   window.resumeLibrary = resumes;
 })();

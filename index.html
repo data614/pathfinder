@@ -20,8 +20,9 @@
         <p class="hero__subtitle">
           Open the site and jump straight into curated analytics, sales, and
           customer success searches across Sydney, Melbourne, and global remote
-          teams. Each visit surfaces the top 20 links, plus the résumé to lead
-          with and the metrics to spotlight.
+          teams. Each visit surfaces the top 20 links, the résumé to lead with,
+          and a cover-letter studio that weaves metrics and research into your
+          outreach.
         </p>
         <div class="hero__meta">
           <span>Last refreshed: <strong id="last-updated">—</strong></span>
@@ -31,6 +32,126 @@
     </header>
 
     <main class="layout">
+      <section class="cover-letter" id="cover-letter">
+        <header class="cover-letter__header">
+          <div>
+            <h2>Cover-letter drafting studio</h2>
+            <p>
+              Paste the job URL, choose the résumé to anchor the story, toggle
+              company research, and capture preferences. Pathfinder streams
+              progress as the draft comes together.
+            </p>
+          </div>
+        </header>
+
+        <form class="cover-letter__form" id="cover-letter-form">
+          <div class="cover-letter__field">
+            <label for="cover-letter-url">Job URL</label>
+            <input
+              type="url"
+              id="cover-letter-url"
+              name="jobUrl"
+              placeholder="https://careers.example.com/role"
+              required
+            />
+            <p class="cover-letter__hint">
+              We fetch the job description and identify the key responsibilities
+              and requirements automatically.
+            </p>
+          </div>
+
+          <div class="cover-letter__field">
+            <label for="cover-letter-resume">Résumé profile</label>
+            <select id="cover-letter-resume" name="resumeId" required></select>
+            <p class="cover-letter__hint">
+              Populated from the résumé library — hover for focus statements.
+            </p>
+          </div>
+
+          <div class="cover-letter__field cover-letter__field--inline cover-letter__field--full">
+            <label class="cover-letter__checkbox" for="cover-letter-include-research">
+              <input type="checkbox" id="cover-letter-include-research" name="includeResearch" />
+              <span>Include company research when we can identify the employer</span>
+            </label>
+            <p class="cover-letter__hint">
+              Adds corporate values, product cues, and recent wins sourced from
+              official pages.
+            </p>
+          </div>
+
+          <div class="cover-letter__field cover-letter__field--full">
+            <label for="cover-letter-preferences">
+              Notes &amp; preferences <span>(optional)</span>
+            </label>
+            <textarea
+              id="cover-letter-preferences"
+              name="preferences"
+              rows="3"
+              placeholder="Mention relocation timing, compensation guardrails, or other specifics."
+            ></textarea>
+          </div>
+
+          <div class="cover-letter__actions">
+            <button type="submit" class="cover-letter__submit">Draft cover letter</button>
+          </div>
+        </form>
+
+        <p id="cover-letter-status" class="cover-letter__status" role="status" hidden></p>
+
+        <div class="cover-letter__body">
+          <section class="cover-letter__progress" aria-live="polite">
+            <h3>Progress log</h3>
+            <p class="cover-letter__progress-empty" id="cover-letter-progress-empty">
+              Submit a request to watch each stage of the drafting pipeline.
+            </p>
+            <ul id="cover-letter-progress"></ul>
+          </section>
+
+          <section class="cover-letter__results">
+            <article class="cover-letter__card">
+              <header class="cover-letter__card-header">
+                <h3>Cover letter draft</h3>
+                <button
+                  type="button"
+                  class="copy-button"
+                  data-copy-target="cover-letter"
+                  data-copy-label="Copy cover letter"
+                >
+                  Copy cover letter
+                </button>
+              </header>
+              <pre id="cover-letter-output" class="cover-letter__markdown" aria-live="polite"></pre>
+            </article>
+
+            <article class="cover-letter__card">
+              <header class="cover-letter__card-header">
+                <h3>Talking points</h3>
+                <button
+                  type="button"
+                  class="copy-button"
+                  data-copy-target="talking-points"
+                  data-copy-label="Copy talking points"
+                >
+                  Copy talking points
+                </button>
+              </header>
+              <ul
+                id="cover-letter-talking-points"
+                class="cover-letter__list"
+                aria-live="polite"
+              ></ul>
+            </article>
+
+            <article class="cover-letter__card">
+              <header class="cover-letter__card-header">
+                <h3>Research references</h3>
+              </header>
+              <ul id="cover-letter-research-sources" class="cover-letter__links"></ul>
+            </article>
+          </section>
+        </div>
+      </section>
+
       <div class="results-meta" id="results-meta" aria-live="polite">
         Tracking curated job searches…
       </div>
@@ -109,8 +230,9 @@
         keeps the latest searches in one place so you can execute fast.
       </p>
     </footer>
-    <script src="assets/resumes.js"></script>
-    <script src="assets/job-links.js"></script>
+    <script src="assets/resumes.js" defer></script>
+    <script src="assets/job-links.js" defer></script>
+    <script src="assets/cover-letter.js" defer></script>
     <script src="assets/script.js" defer></script>
   </body>
 </html>
