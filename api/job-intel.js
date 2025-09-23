@@ -8,6 +8,7 @@ const { Readability } = require('@mozilla/readability');
 const sanitizeHtml = require('sanitize-html');
 const OpenAI = require('openai');
 const { resumeLibrary } = require('./resume-library');
+const { COVER_LETTER_SCHEMA, createCoverLetterPrompt } = require('./prompt-template');
 
 const DEFAULT_RATE_LIMIT_WINDOW_MS = Number(process.env.JOB_INTEL_RATE_WINDOW_MS) || 60_000;
 const DEFAULT_RATE_LIMIT_MAX = Number(process.env.JOB_INTEL_RATE_LIMIT) || 5;
@@ -22,44 +23,6 @@ const USER_AGENT =
 
 const researchCache = new Map();
 
-const COVER_LETTER_SCHEMA = {
-  name: 'cover_letter_bundle',
-  schema: {
-    type: 'object',
-    additionalProperties: false,
-    required: ['coverLetterMarkdown', 'talkingPoints', 'researchSources'],
-    properties: {
-      coverLetterMarkdown: {
-        type: 'string',
-        description: 'Markdown formatted cover letter tailored to the job using résumé and company research.',
-      },
-      talkingPoints: {
-        type: 'array',
-        items: {
-          type: 'string',
-          description: 'Concise talking points for interview or outreach follow-up.',
-        },
-      },
-      researchSources: {
-        type: 'array',
-        items: {
-          type: 'object',
-          additionalProperties: false,
-          required: ['title', 'url'],
-          properties: {
-            title: {
-              type: 'string',
-            },
-            url: {
-              type: 'string',
-              format: 'uri',
-            },
-          },
-        },
-      },
-    },
-  },
-};
 
 function sanitizeText(value) {
   if (typeof value !== 'string') {
@@ -632,30 +595,6 @@ async function gatherCompanyResearch(companyName, signal) {
   return payload;
 }
 
-function buildOpenAiPrompt(payload) {
-  const { job, resume, companyResearch, userPreferences } = payload;
-  return [
-    'You are an assistant that drafts tailored cover letters and preparation notes.',
-    'Use the provided job description, résumé highlights, company research, and user preferences.',
-    'Respond with concise, high-signal content suitable for senior recruiters.',
-    'Do not invent facts. Prefer bullet lists for talking points.',
-    'Return a JSON object matching the provided schema.',
-    '',
-    '--- DATA START ---',
-    JSON.stringify(
-      {
-        job,
-        resume,
-        companyResearch,
-        userPreferences,
-      },
-      null,
-      2,
-    ),
-    '--- DATA END ---',
-  ].join('\n');
-}
-
 function parseOpenAiResponse(response) {
   if (!response) {
     throw new Error('OpenAI response was empty.');
@@ -939,11 +878,32 @@ function createJobIntelRouter(config = {}) {
         url: jobDetails.metadata.sourceUrl,
       };
 
+      const resumeSkills = sanitizeArray(selectedResume.skills, 12);
+      const promptProfile = {
+        id: selectedResume.id,
+        name: selectedResume.name,
+        focus: sanitizeText(selectedResume.promptProfile?.focus || selectedResume.focus),
+        topHighlights: sanitizeArray(
+          selectedResume.promptProfile?.topHighlights || resumeHighlights,
+          5,
+        ),
+        prioritySkills: sanitizeArray(
+          selectedResume.promptProfile?.prioritySkills || resumeSkills,
+          12,
+        ),
+        primaryMetrics: sanitizeArray(
+          selectedResume.promptProfile?.primaryMetrics || resumeHighlights,
+          5,
+        ),
+      };
+
       const resumePayload = {
         id: selectedResume.id,
         name: selectedResume.name,
         focus: sanitizeText(selectedResume.focus),
         highlights: resumeHighlights,
+        skills: resumeSkills,
+        promptProfile,
       };
 
       const openAiPayload = {
@@ -971,7 +931,7 @@ function createJobIntelRouter(config = {}) {
         () =>
           openaiClient.responses.create({
             model: openAiModel,
-            input: buildOpenAiPrompt(openAiPayload),
+            input: createCoverLetterPrompt(openAiPayload),
             temperature: 0.6,
             max_output_tokens: 1200,
             response_format: { type: 'json_schema', json_schema: COVER_LETTER_SCHEMA },
