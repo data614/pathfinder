@@ -1,5 +1,3 @@
-window.jobLinksLastUpdated = "22 September 2025";
-
 window.jobLinks = [
   {
     title: "Seek – Power BI roles in Sydney",
@@ -144,5 +142,41 @@ window.jobLinks = [
     summary:
       "Track customer success teams hiring remotely. Stress escalation handling, NPS gains, and automation that removed manual workloads.",
     focusAreas: ["Customer retention", "Escalations", "Automation"],
+  },
+  {
+    title: "Indeed – IT support & service desk roles (Sydney, posted in 7 days)",
+    url: "https://au.indeed.com/jobs?q=service+desk&l=Sydney+NSW&fromage=7",
+    locations: ["Sydney"],
+    resume: "IT Support CV",
+    summary:
+      "Scan this feed for service desk teams that want automation-savvy analysts. Mention your ServiceNow onboarding flows, GitHub release stabilisation, and RG146 compliance hand-offs.",
+    focusAreas: ["ServiceNow", "Automation", "Compliance"],
+  },
+  {
+    title: "LinkedIn – Power Platform & automation roles (Australia, last 7 days)",
+    url: "https://www.linkedin.com/jobs/search/?keywords=Power%20Platform&location=Australia&f_TPR=r604800",
+    locations: ["Remote", "Australia"],
+    resume: "Data Automation Resume",
+    summary:
+      "Pull daily for automation-first teams across Australia. Lead with Power Automate cost savings, DevOps delivery, and governance-friendly workflows.",
+    focusAreas: ["Power Automate", "DevOps hand-offs", "Process optimisation"],
+  },
+  {
+    title: "Seek – Customer insight & lifecycle analytics (Sydney & Melbourne)",
+    url: "https://www.seek.com.au/customer-insights-analyst-jobs",
+    locations: ["Sydney", "Melbourne"],
+    resume: "Customer Service CV",
+    summary:
+      "Use this to spot customer lifecycle analytics roles needing CX storytelling. Highlight high-NPS wins, Salesforce hygiene, and Power BI reporting.",
+    focusAreas: ["Customer insights", "Salesforce hygiene", "NPS storytelling"],
+  },
+  {
+    title: "LinkedIn – Remote data analyst & reporting roles (worldwide, last 7 days)",
+    url: "https://www.linkedin.com/jobs/search/?keywords=Reporting%20Analyst&location=Worldwide&f_WT=2&f_TPR=r604800",
+    locations: ["Remote", "Global"],
+    resume: "Data Analyst CV",
+    summary:
+      "Check nightly for distributed reporting teams. Mention asynchronous delivery, GitHub Enterprise collaboration, and automation that keeps dashboards current.",
+    focusAreas: ["Async delivery", "GitHub Enterprise", "Dashboard automation"],
   },
 ];
