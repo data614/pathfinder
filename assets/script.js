@@ -1,4 +1,36 @@
 (() => {
+  const themeToggleButton = document.getElementById('theme-toggle');
+  const htmlEl = document.documentElement;
+
+  const applyTheme = (theme) => {
+    htmlEl.classList.remove('dark-mode');
+    if (theme === 'dark') {
+      htmlEl.classList.add('dark-mode');
+    }
+  };
+
+  const toggleTheme = () => {
+    const currentThemeIsDark = htmlEl.classList.contains('dark-mode');
+    const newTheme = currentThemeIsDark ? 'light' : 'dark';
+    applyTheme(newTheme);
+    localStorage.setItem('theme', newTheme);
+  };
+
+  if (themeToggleButton) {
+    themeToggleButton.addEventListener('click', toggleTheme);
+  }
+
+  // Apply saved theme on initial load
+  const savedTheme = localStorage.getItem('theme');
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  } else {
+    // If no theme is saved, use the browser preference
+    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    applyTheme(prefersDark ? 'dark' : 'light');
+  }
+
+
   const jobListEl = document.getElementById('job-list');
   const resultsMetaEl = document.getElementById('results-meta');
   const lastUpdatedEl = document.getElementById('last-updated');
