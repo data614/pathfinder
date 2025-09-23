@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cover-letter drafting studio · Pathfinder</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Pathfinder toolkit</p>
+        <h1>Cover-letter drafting studio</h1>
+        <p class="hero__subtitle">
+          Paste the job URL, choose the résumé to anchor the story, toggle
+          company research, and capture preferences. Pathfinder streams progress
+          as the draft comes together so you can copy the results straight into
+          outreach.
+        </p>
+        <div class="hero__actions">
+          <a class="hero__action hero__action--secondary" href="index.html"
+            >← Back to job links</a
+          >
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="cover-letter" id="cover-letter">
+        <header class="cover-letter__header">
+          <div>
+            <h2>Draft with résumé context and research cues</h2>
+            <p>
+              The studio automatically pulls the recommended résumé library,
+              streams drafting updates, and packages the final markdown,
+              talking points, and research citations for quick outreach.
+            </p>
+          </div>
+        </header>
+
+        <form class="cover-letter__form" id="cover-letter-form">
+          <div class="cover-letter__field">
+            <label for="cover-letter-url">Job URL</label>
+            <input
+              type="url"
+              id="cover-letter-url"
+              name="jobUrl"
+              placeholder="https://careers.example.com/role"
+              required
+            />
+            <p class="cover-letter__hint">
+              We fetch the job description and identify the key responsibilities
+              and requirements automatically.
+            </p>
+          </div>
+
+          <div class="cover-letter__field">
+            <label for="cover-letter-resume">Résumé profile</label>
+            <select id="cover-letter-resume" name="resumeId" required></select>
+            <p class="cover-letter__hint">
+              Populated from the résumé library — hover for focus statements.
+            </p>
+          </div>
+
+          <div
+            class="cover-letter__field cover-letter__field--inline cover-letter__field--full"
+          >
+            <label class="cover-letter__checkbox" for="cover-letter-include-research">
+              <input
+                type="checkbox"
+                id="cover-letter-include-research"
+                name="includeResearch"
+              />
+              <span>Include company research when we can identify the employer</span>
+            </label>
+            <p class="cover-letter__hint">
+              Adds corporate values, product cues, and recent wins sourced from
+              official pages.
+            </p>
+          </div>
+
+          <div class="cover-letter__field cover-letter__field--full">
+            <label for="cover-letter-preferences">
+              Notes &amp; preferences <span>(optional)</span>
+            </label>
+            <textarea
+              id="cover-letter-preferences"
+              name="preferences"
+              rows="3"
+              placeholder="Mention relocation timing, compensation guardrails, or other specifics."
+            ></textarea>
+          </div>
+
+          <div class="cover-letter__actions">
+            <button type="submit" class="cover-letter__submit">
+              Draft cover letter
+            </button>
+          </div>
+        </form>
+
+        <p
+          id="cover-letter-status"
+          class="cover-letter__status"
+          role="status"
+          hidden
+        ></p>
+
+        <div class="cover-letter__body">
+          <section class="cover-letter__progress" aria-live="polite">
+            <h3>Progress log</h3>
+            <p
+              class="cover-letter__progress-empty"
+              id="cover-letter-progress-empty"
+            >
+              Submit a request to watch each stage of the drafting pipeline.
+            </p>
+            <ul id="cover-letter-progress"></ul>
+          </section>
+
+          <section class="cover-letter__results">
+            <article class="cover-letter__card">
+              <header class="cover-letter__card-header">
+                <h3>Cover letter draft</h3>
+                <button
+                  type="button"
+                  class="copy-button"
+                  data-copy-target="cover-letter"
+                  data-copy-label="Copy cover letter"
+                >
+                  Copy cover letter
+                </button>
+              </header>
+              <pre
+                id="cover-letter-output"
+                class="cover-letter__markdown"
+                aria-live="polite"
+              ></pre>
+            </article>
+
+            <article class="cover-letter__card">
+              <header class="cover-letter__card-header">
+                <h3>Talking points</h3>
+                <button
+                  type="button"
+                  class="copy-button"
+                  data-copy-target="talking-points"
+                  data-copy-label="Copy talking points"
+                >
+                  Copy talking points
+                </button>
+              </header>
+              <ul
+                id="cover-letter-talking-points"
+                class="cover-letter__list"
+                aria-live="polite"
+              ></ul>
+            </article>
+
+            <article class="cover-letter__card">
+              <header class="cover-letter__card-header">
+                <h3>Research references</h3>
+              </header>
+              <ul
+                id="cover-letter-research-sources"
+                class="cover-letter__links"
+              ></ul>
+            </article>
+          </section>
+        </div>
+      </section>
+
+      <section class="tips" aria-label="Drafting guidance">
+        <h2>Tips for sharper outreach</h2>
+        <ul>
+          <li>
+            Start with the résumé recommended beside each job link so the
+            achievements in your draft already match the role.
+          </li>
+          <li>
+            Toggle company research when the employer is known to automatically
+            weave in product highlights, values, and fresh wins.
+          </li>
+          <li>
+            Use the preferences field to note tone requests, relocation plans,
+            or follow-up ideas that should surface in the draft.
+          </li>
+        </ul>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Need a refresher on job leads? Return to the
+        <a href="index.html">Pathfinder job links</a> to open the latest search
+        feeds.
+      </p>
+    </footer>
+
+    <script src="assets/resumes.js" defer></script>
+    <script src="assets/cover-letter.js" defer></script>
+  </body>
+</html>
