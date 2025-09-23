@@ -1071,6 +1071,32 @@ a:focus {
   line-height: 1.5;
 }
 
+.job-card__title-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  color: inherit;
+  text-decoration: none;
+  transition: color 160ms ease;
+}
+
+.job-card__title-link::after {
+  content: '↗';
+  font-size: 1rem;
+  line-height: 1;
+  transition: transform 160ms ease;
+}
+
+.job-card__title-link:hover,
+.job-card__title-link:focus {
+  color: var(--accent);
+}
+
+.job-card__title-link:hover::after,
+.job-card__title-link:focus::after {
+  transform: translateY(-1px);
+}
+
 .job-card__summary {
   margin: 0;
   color: var(--text-muted);
@@ -1114,11 +1140,6 @@ a:focus {
   gap: 0.5rem;
 }
 
-.job-card__resume-label {
-  font-weight: 600;
-  color: var(--text-muted);
-}
-
 .job-card__resume .resume-link {
   background: rgba(15, 23, 42, 0.06);
   border-color: transparent;
@@ -1136,33 +1157,6 @@ a:focus {
   background: rgba(37, 99, 235, 0.16);
   border-color: rgba(37, 99, 235, 0.35);
   color: var(--accent);
-}
-
-.job-card__cta {
-  align-self: flex-start;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.6rem 1rem;
-  border-radius: 10px;
-  background: var(--accent);
-  color: #f8fafc;
-  font-weight: 600;
-  border: none;
-  box-shadow: 0 12px 22px rgba(37, 99, 235, 0.25);
-  transition: transform 160ms ease, box-shadow 160ms ease;
-}
-
-.job-card__cta::after {
-  content: '↗';
-  font-size: 1.1rem;
-  line-height: 1;
-}
-
-.job-card__cta:hover,
-.job-card__cta:focus {
-  transform: translateY(-1px);
-  box-shadow: 0 18px 32px rgba(37, 99, 235, 0.28);
 }
 
 .loading,
@@ -1373,10 +1367,6 @@ a:focus {
     color: #bbf7d0;
   }
 
-  .job-card__resume-label {
-    color: #cbd5f5;
-  }
-
   .job-card__resume .resume-link {
     background: rgba(148, 163, 184, 0.2);
     border-color: transparent;
@@ -1398,10 +1388,6 @@ a:focus {
   .badge--skill {
     background: rgba(14, 165, 233, 0.25);
     color: #bae6fd;
-  }
-
-  .job-card__cta {
-    color: #e2e8f0;
   }
 
   .footer {
