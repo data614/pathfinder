@@ -38,6 +38,154 @@
       <section class="job-grid" id="job-list" aria-live="polite" aria-busy="true">
         <p class="loading">Loading job links…</p>
       </section>
+
+      <section
+        id="cover-letter-tools"
+        class="analysis cover-letter"
+        aria-labelledby="cover-letter-heading"
+      >
+        <div class="cover-letter__intro">
+          <h2 id="cover-letter-heading">Cover letter drafting tools</h2>
+          <p>
+            Paste a job-posting link, choose the résumé to emphasise, and let the
+            assistant stream the research and writing steps for you.
+          </p>
+        </div>
+
+        <form
+          id="cover-letter-form"
+          class="analysis__form cover-letter__form"
+          aria-describedby="cover-letter-status"
+        >
+          <div class="analysis__field cover-letter__field">
+            <label class="analysis__label" for="cover-letter-job-url"
+              >Job-posting URL</label
+            >
+            <input
+              type="url"
+              id="cover-letter-job-url"
+              name="job-url"
+              placeholder="https://example.com/job-posting"
+              required
+              autocomplete="url"
+              inputmode="url"
+            />
+          </div>
+          <div class="analysis__field cover-letter__field">
+            <label class="analysis__label" for="cover-letter-resume"
+              >Résumé to lead with</label
+            >
+            <select id="cover-letter-resume" name="resume-id" required>
+              <option value="">Select a résumé focus…</option>
+            </select>
+          </div>
+          <fieldset class="analysis__field cover-letter__field cover-letter__fieldset">
+            <legend class="analysis__label">Company research</legend>
+            <div class="cover-letter__options">
+              <label class="cover-letter__option">
+                <input
+                  type="radio"
+                  name="include-research"
+                  value="research"
+                  checked
+                />
+                <span>Research company</span>
+              </label>
+              <label class="cover-letter__option">
+                <input type="radio" name="include-research" value="skip" />
+                <span>Skip research</span>
+              </label>
+            </div>
+          </fieldset>
+          <div class="analysis__actions cover-letter__actions">
+            <button
+              type="submit"
+              id="cover-letter-submit"
+              class="analysis__submit"
+            >
+              Draft cover letter
+            </button>
+            <p class="analysis__hint">
+              We’ll stream each step—scraping the job, researching the company,
+              and drafting the final letter.
+            </p>
+          </div>
+        </form>
+
+        <div class="analysis__feedback cover-letter__feedback">
+          <h3>Progress</h3>
+          <p
+            id="cover-letter-status"
+            class="analysis__status cover-letter__status"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+            aria-busy="false"
+          >
+            Add a job-posting URL and select your résumé to start drafting.
+          </p>
+          <ul
+            id="cover-letter-status-log"
+            class="cover-letter__status-log"
+            aria-hidden="true"
+          ></ul>
+        </div>
+
+        <div class="cover-letter__outputs">
+          <article
+            class="analysis-result__card cover-letter__card"
+            aria-labelledby="cover-letter-output-heading"
+          >
+            <div class="cover-letter__card-header">
+              <h3 id="cover-letter-output-heading">Cover letter draft</h3>
+              <div class="cover-letter__copy">
+                <button
+                  type="button"
+                  id="copy-cover-letter"
+                  class="analysis__submit cover-letter__copy-button"
+                  disabled
+                >
+                  Copy letter
+                </button>
+                <span
+                  id="cover-letter-copy-status"
+                  class="cover-letter__copy-status"
+                  role="status"
+                  aria-live="polite"
+                  aria-atomic="true"
+                ></span>
+              </div>
+            </div>
+            <pre
+              id="cover-letter-output"
+              class="cover-letter__text"
+              aria-live="polite"
+            ></pre>
+          </article>
+          <article
+            class="analysis-result__card cover-letter__card"
+            aria-labelledby="company-summary-heading"
+          >
+            <h3 id="company-summary-heading">Company summary</h3>
+            <pre
+              id="company-summary-output"
+              class="cover-letter__text"
+              aria-live="polite"
+            ></pre>
+          </article>
+          <article
+            class="analysis-result__card cover-letter__card"
+            aria-labelledby="job-snippet-heading"
+          >
+            <h3 id="job-snippet-heading">Job posting snippet</h3>
+            <pre
+              id="job-snippet-output"
+              class="cover-letter__text"
+              aria-live="polite"
+            ></pre>
+          </article>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
@@ -73,7 +221,9 @@
       </p>
     </footer>
 
+    <script src="assets/resumes.js"></script>
     <script src="assets/job-links.js"></script>
     <script src="assets/script.js" defer></script>
+    <script src="assets/cover-letter.js" defer></script>
   </body>
 </html>
