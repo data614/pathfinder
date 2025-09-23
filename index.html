@@ -20,121 +20,20 @@
         <p class="hero__subtitle">
           Open the site and jump straight into curated analytics, sales, and
           customer success searches across Sydney, Melbourne, and global remote
-          teams. Filters keep things tidy, and each card reminds you which CV to
-          lead with and the metrics to spotlight.
+          teams. Each visit surfaces the top 20 links, plus the résumé to lead
+          with and the metrics to spotlight.
         </p>
         <div class="hero__meta">
           <span>Last refreshed: <strong id="last-updated">—</strong></span>
-          <span>Time-saver: add this page to your browser bookmarks bar.</span>
+          <span>Auto-refreshes every 3 hours to keep the shortlist current.</span>
         </div>
-      </div>
-      <div class="hero__filters" role="toolbar" aria-label="Filter job links by location">
-        <button type="button" class="filter-button is-active" data-filter="all">
-          All locations
-        </button>
-        <button type="button" class="filter-button" data-filter="Sydney">
-          Sydney
-        </button>
-        <button type="button" class="filter-button" data-filter="Melbourne">
-          Melbourne
-        </button>
-        <button type="button" class="filter-button" data-filter="Remote">
-          Remote &amp; hybrid
-        </button>
       </div>
     </header>
 
     <main class="layout">
-      <section class="controls" aria-label="Search and quick tips">
-        <label class="search" for="search">
-          <span class="search__label">Search keywords</span>
-          <input
-            id="search"
-            type="search"
-            name="search"
-            placeholder="Filter by role, skill, or résumé"
-            autocomplete="off"
-          />
-        </label>
-        <aside class="tips">
-          <h2>Résumé &amp; cover-letter focus</h2>
-          <ul>
-            <li>
-              Lead with the <strong>Data Analyst CV</strong> for Power BI, BI, and
-              analytics postings. Mention your <em>$1M grant win</em>, Power BI
-              Premium deployments, and Jenkins/Redis automation.
-            </li>
-            <li>
-              Keep the <strong>Sales Representative CV</strong> ready for SDR and
-              inside-sales roles. Emphasise <em>20–30 calls/day</em>, a
-              <em>10% conversion rate</em>, and Salesforce/Xero mastery.
-            </li>
-            <li>
-              Use the <strong>Customer Service or IT Support CV</strong> for CX,
-              service desk, or QA opportunities. Highlight <em>high-NPS support</em>,
-              Salesforce data hygiene, and automation that reduced manual effort.
-            </li>
-            <li>
-              Reinforce <strong>Power BI Premium, Python, SQL, Power Automate,</strong>
-              and <strong>ServiceNow</strong> to capture ATS keywords across
-              postings.
-            </li>
-          </ul>
-        </aside>
-      </section>
-
-      <div class="results-meta" id="results-meta" aria-live="polite"></div>
-
-      <section class="analysis" id="analysis">
-        <div class="analysis__header">
-          <h2>Analyse a job posting</h2>
-          <p>
-            Paste a job link and the description text to score each résumé against the
-            tracked skills. We’ll highlight the best fit and the gaps to cover.
-          </p>
-        </div>
-        <form id="analysis-form" class="analysis__form" novalidate>
-          <label class="analysis__field" for="analysis-url">
-            <span class="analysis__label">Job link</span>
-            <input
-              type="url"
-              id="analysis-url"
-              name="job-url"
-              placeholder="https://www.linkedin.com/jobs/..."
-              autocomplete="off"
-            />
-          </label>
-          <label class="analysis__field analysis__field--textarea" for="analysis-description">
-            <span class="analysis__label">Job description text</span>
-            <textarea
-              id="analysis-description"
-              name="job-description"
-              rows="6"
-              placeholder="Paste the full job description to avoid CORS blockers and capture every requirement."
-            ></textarea>
-          </label>
-          <div class="analysis__actions">
-            <button type="submit" class="analysis__submit">Analyse résumé fit</button>
-            <p class="analysis__hint">
-              Tip: mention any missing skills in your outreach email before applying.
-            </p>
-          </div>
-        </form>
-        <div class="analysis__tracked">
-          <h3>Skills we monitor</h3>
-          <div class="analysis__chips" id="analysis-tracked-skills"></div>
-        </div>
-        <div class="analysis__feedback">
-          <p id="analysis-status" class="analysis__status" aria-live="polite"></p>
-          <p
-            id="analysis-error"
-            class="analysis__status analysis__status--error"
-            role="alert"
-            hidden
-          ></p>
-        </div>
-        <div id="analysis-results" class="analysis__results" hidden></div>
-      </section>
+      <div class="results-meta" id="results-meta" aria-live="polite">
+        Tracking curated job searches…
+      </div>
 
       <section class="job-grid" id="job-list" aria-live="polite" aria-busy="true">
         <p class="loading">Loading job links…</p>
@@ -142,6 +41,31 @@
     </main>
 
     <footer class="footer">
+      <section class="tips tips--footer" aria-label="Résumé and cover-letter focus">
+        <h2>Résumé &amp; cover-letter focus</h2>
+        <ul>
+          <li>
+            Lead with the <strong>Data Analyst CV</strong> for Power BI, BI, and
+            analytics postings. Mention your <em>$1M grant win</em>, Power BI
+            Premium deployments, and Jenkins/Redis automation.
+          </li>
+          <li>
+            Keep the <strong>Sales Representative CV</strong> ready for SDR and
+            inside-sales roles. Emphasise <em>20–30 calls/day</em>, a
+            <em>10% conversion rate</em>, and Salesforce/Xero mastery.
+          </li>
+          <li>
+            Use the <strong>Customer Service or IT Support CV</strong> for CX,
+            service desk, or QA opportunities. Highlight <em>high-NPS support</em>,
+            Salesforce data hygiene, and automation that reduced manual effort.
+          </li>
+          <li>
+            Reinforce <strong>Power BI Premium, Python, SQL, Power Automate,</strong>
+            and <strong>ServiceNow</strong> to capture ATS keywords across
+            postings.
+          </li>
+        </ul>
+      </section>
       <p>
         Tip: schedule two 25-minute outreach blocks per weekday and update the
         résumé bullet that best matches the job focus before applying. This page
@@ -150,8 +74,6 @@
     </footer>
 
     <script src="assets/job-links.js"></script>
-    <script src="assets/resumes.js"></script>
-    <script src="assets/analyzer.js"></script>
     <script src="assets/script.js" defer></script>
   </body>
 </html>
