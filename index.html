@@ -85,6 +85,57 @@
 
       <div class="results-meta" id="results-meta" aria-live="polite"></div>
 
+      <section class="analysis" id="analysis">
+        <div class="analysis__header">
+          <h2>Analyse a job posting</h2>
+          <p>
+            Paste a job link and the description text to score each résumé against the
+            tracked skills. We’ll highlight the best fit and the gaps to cover.
+          </p>
+        </div>
+        <form id="analysis-form" class="analysis__form" novalidate>
+          <label class="analysis__field" for="analysis-url">
+            <span class="analysis__label">Job link</span>
+            <input
+              type="url"
+              id="analysis-url"
+              name="job-url"
+              placeholder="https://www.linkedin.com/jobs/..."
+              autocomplete="off"
+            />
+          </label>
+          <label class="analysis__field analysis__field--textarea" for="analysis-description">
+            <span class="analysis__label">Job description text</span>
+            <textarea
+              id="analysis-description"
+              name="job-description"
+              rows="6"
+              placeholder="Paste the full job description to avoid CORS blockers and capture every requirement."
+            ></textarea>
+          </label>
+          <div class="analysis__actions">
+            <button type="submit" class="analysis__submit">Analyse résumé fit</button>
+            <p class="analysis__hint">
+              Tip: mention any missing skills in your outreach email before applying.
+            </p>
+          </div>
+        </form>
+        <div class="analysis__tracked">
+          <h3>Skills we monitor</h3>
+          <div class="analysis__chips" id="analysis-tracked-skills"></div>
+        </div>
+        <div class="analysis__feedback">
+          <p id="analysis-status" class="analysis__status" aria-live="polite"></p>
+          <p
+            id="analysis-error"
+            class="analysis__status analysis__status--error"
+            role="alert"
+            hidden
+          ></p>
+        </div>
+        <div id="analysis-results" class="analysis__results" hidden></div>
+      </section>
+
       <section class="job-grid" id="job-list" aria-live="polite" aria-busy="true">
         <p class="loading">Loading job links…</p>
       </section>
@@ -99,6 +150,8 @@
     </footer>
 
     <script src="assets/job-links.js"></script>
+    <script src="assets/resumes.js"></script>
+    <script src="assets/analyzer.js"></script>
     <script src="assets/script.js" defer></script>
   </body>
 </html>
