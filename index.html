@@ -38,6 +38,43 @@
       <section class="job-grid" id="job-list" aria-live="polite" aria-busy="true">
         <p class="loading">Loading job links…</p>
       </section>
+
+      <section
+        class="resume-viewer resume-viewer--collapsed"
+        aria-label="Résumé library"
+      >
+        <header class="resume-viewer__header">
+          <div class="resume-viewer__intro">
+            <h2>Résumé library</h2>
+            <p>
+              Open the version that best matches the job before applying and keep
+              the talking points handy.
+            </p>
+          </div>
+          <button
+            type="button"
+            class="resume-viewer__toggle"
+            id="resume-toggle"
+            aria-expanded="false"
+            aria-controls="resume-content"
+          >
+            Show résumés
+          </button>
+        </header>
+        <div class="resume-viewer__content" id="resume-content" hidden>
+          <p
+            class="resume-viewer__feedback"
+            id="resume-feedback"
+            role="status"
+            aria-live="polite"
+          >
+            Select a résumé to open it in a new tab.
+          </p>
+          <div class="resume-viewer__list" id="resume-list">
+            <p class="resume-viewer__empty">Loading résumé library…</p>
+          </div>
+        </div>
+      </section>
     </main>
 
     <footer class="footer">
@@ -72,7 +109,7 @@
         keeps the latest searches in one place so you can execute fast.
       </p>
     </footer>
-
+    <script src="assets/resumes.js"></script>
     <script src="assets/job-links.js"></script>
     <script src="assets/script.js" defer></script>
   </body>
