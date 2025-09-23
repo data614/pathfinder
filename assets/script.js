@@ -293,27 +293,27 @@
     const resumeBlock =
       resumeLabel && resumeTarget
         ? `<div class="job-card__resume">
-            <span class="job-card__resume-label">Recommended résumé</span>
             ${createResumeButton(resumeTarget, resumeLabel, {
               ariaLabel: resumeLabel ? `View the ${resumeLabel} résumé` : 'View résumé',
             })}
           </div>`
         : '';
 
-    const jobUrl = typeof job.url === 'string' && job.url.trim() ? job.url : '#';
+    const jobUrl = typeof job.url === 'string' && job.url.trim() ? job.url.trim() : '';
+    const safeJobUrl = jobUrl ? escapeHtml(jobUrl) : '';
     const title = escapeHtml(job.title || 'Curated job search');
     const summary = escapeHtml(job.summary || '');
+    const titleContent = jobUrl
+      ? `<a class="job-card__title-link" href="${safeJobUrl}" target="_blank" rel="noopener noreferrer">${title}</a>`
+      : title;
 
     return `
       <article class="job-card">
         ${locationBadges}
-        <h3 class="job-card__title">${title}</h3>
+        <h3 class="job-card__title">${titleContent}</h3>
         <p class="job-card__summary">${summary}</p>
         ${resumeBlock}
         ${focusBadges}
-        <a class="job-card__cta" href="${escapeHtml(
-          jobUrl,
-        )}" target="_blank" rel="noopener noreferrer">Open search</a>
       </article>
     `;
   };
