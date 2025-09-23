@@ -10,7 +10,7 @@ const PORT = Number(process.env.PORT) || 3000;
 app.use(express.json({ limit: '1mb' }));
 app.use('/api/job-intel', createJobIntelRouter());
 
-app.use(express.static(path.join(__dirname)));
+app.use(express.static(path.join(__dirname, 'public')));
 
 app.use((err, req, res, next) => {
   // eslint-disable-next-line no-console
