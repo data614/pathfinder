@@ -3,7 +3,7 @@
     {
       id: 'data-analyst-cv',
       name: 'Data Analyst CV',
-      file: 'Data Analyst CV.docx',
+      file: 'data/Data Analyst CV.docx',
       focus:
         'Analytics storyteller for Power BI teams with automation, grant funding, and API integration wins.',
       highlights: [
@@ -47,7 +47,7 @@
     {
       id: 'data-automation-resume',
       name: 'Data Automation Resume',
-      file: 'Data Automation Resume.docx',
+      file: 'data/Data Automation Resume.docx',
       focus:
         'Automation-first analytics profile combining Power BI Premium, DevOps, and process streamlining.',
       highlights: [
@@ -91,7 +91,7 @@
     {
       id: 'data-migration-cv',
       name: 'Data Migration CV',
-      file: 'Data Migration CV.docx',
+      file: 'data/Data Migration CV.docx',
       focus:
         'Data migration and analytics specialist with Power BI, automation, and stakeholder coordination.',
       highlights: [
@@ -124,7 +124,7 @@
     {
       id: 'customer-service-cv',
       name: 'Customer Service CV',
-      file: 'Customer Service CV.docx',
+      file: 'data/Customer Service CV.docx',
       focus:
         'Customer success operator blending analytics dashboards with frontline escalation expertise.',
       highlights: [
@@ -152,7 +152,7 @@
     {
       id: 'it-support-cv',
       name: 'IT Support CV',
-      file: 'IT Support CV.docx',
+      file: 'data/IT Support CV.docx',
       focus:
         'Service desk and QA professional with automation, DevOps hand-offs, and stakeholder comms.',
       highlights: [
@@ -187,7 +187,7 @@
     {
       id: 'it-support-resume',
       name: 'IT Support Resume',
-      file: 'IT Support Resume.docx',
+      file: 'data/IT Support Resume.docx',
       focus:
         'Hands-on IT support practitioner with CI/CD exposure and compliance-driven onboarding.',
       highlights: [
@@ -222,7 +222,7 @@
     {
       id: 'sales-representative-cv',
       name: 'Sales Representative CV',
-      file: 'Sales Representative CV.docx',
+      file: 'data/Sales Representative CV.docx',
       focus:
         'High-velocity SDR profile with compliance-ready messaging and analytics-informed demos.',
       highlights: [
@@ -256,7 +256,7 @@
     {
       id: 'sales-executive-cv',
       name: 'Sales Executive CV',
-      file: 'Sales Executive CV.docx',
+      file: 'data/Sales Executive CV.docx',
       focus:
         'Account executive and field sales hybrid with compliance-ready processes and analytics demos.',
       highlights: [
@@ -290,7 +290,7 @@
     {
       id: 'banking-consultant-cv',
       name: 'Banking Consultant CV',
-      file: 'Banking Consultant CV.docx',
+      file: 'data/Banking Consultant CV.docx',
       focus:
         'Banking and financial services consultant with analytics demos and compliance mastery.',
       highlights: [
