@@ -73,6 +73,17 @@ a:focus {
   color: rgba(248, 250, 252, 0.9);
 }
 
+.hero__subtitle a {
+  color: #c7d2fe;
+  font-weight: 600;
+}
+
+.hero__subtitle a:hover,
+.hero__subtitle a:focus-visible {
+  color: #e0e7ff;
+  text-decoration: underline;
+}
+
 .hero__meta {
   margin-top: 1.5rem;
   display: flex;
