@@ -15,14 +15,42 @@
   <body>
     <header class="hero">
       <div class="hero__content">
-        <p class="hero__eyebrow">Pathfinder toolkit</p>
-        <h1>Cover-letter drafting studio</h1>
-        <p class="hero__subtitle">
-          Paste the job URL, choose the résumé to anchor the story, toggle
-          company research, and capture preferences. Pathfinder streams progress
-          as the draft comes together so you can copy the results straight into
-          outreach.
-        </p>
+        <div class="hero__toolbar">
+          <div class="hero__title-group">
+            <p class="hero__eyebrow">Pathfinder toolkit</p>
+            <h1>Cover-letter drafting studio</h1>
+            <p class="hero__subtitle">
+              Paste the job URL, choose the résumé to anchor the story, toggle company research, and capture preferences.
+              Pathfinder streams progress as the draft comes together so you can copy the results straight into outreach.
+            </p>
+          </div>
+          <nav class="hero__quick-links" aria-label="Primary navigation">
+            <a
+              class="hero__quick-link"
+              href="https://github.com/data614/pathfinder"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Github</a
+            >
+            <a class="hero__quick-link" href="cover-letter.html" aria-current="page">Cover Letter Studio</a>
+            <a class="hero__quick-link" href="resumes.html">Resume Library</a>
+            <a
+              class="hero__quick-link"
+              href="https://app.netlify.com/teams/contact-ucroaay/projects"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Deploy</a
+            >
+            <button
+              type="button"
+              class="hero__quick-link hero__quick-link--icon theme-toggle"
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+            >
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
         <div class="hero__resources" aria-label="Quick Pathfinder tools">
           <a class="hero__resource-link" href="cover-letter.html">
             <span class="hero__resource-icon" aria-hidden="true">
