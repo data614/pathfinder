@@ -95,11 +95,20 @@
   })();
 
   const buildResumeUrl = (filePath) => {
-    if (typeof filePath !== 'string' || !filePath.trim()) {
+    if (typeof filePath !== 'string') {
       return '';
     }
 
-    return filePath
+    const trimmedPath = filePath.trim();
+    if (!trimmedPath) {
+      return '';
+    }
+
+    if (/^[a-z][a-z0-9+.-]*:\/\//i.test(trimmedPath)) {
+      return trimmedPath;
+    }
+
+    return trimmedPath
       .split('/')
       .map((segment) => encodeURIComponent(segment))
       .join('/');
