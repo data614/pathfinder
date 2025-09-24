@@ -31,7 +31,7 @@
     {
       id: 'data-analyst-cv',
       name: 'Data Analyst CV',
-      file: 'data/Data Analyst CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EQjQ4wDZMxxMsLPrcitR_YQBdUWL7iB8EzGHL_-tQkxfNw?e=moPgn4',
       focus:
         'Analytics storyteller for Power BI teams with automation, grant funding, and API integration wins.',
       highlights: [
@@ -75,7 +75,7 @@
     {
       id: 'data-automation-resume',
       name: 'Data Automation Resume',
-      file: 'data/Data Automation Resume.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EaEDtij2GNtNuz0NWT01s7YBodQc2f0tx_M-xIcjgD9ieg?e=HSi4Vc',
       focus:
         'Automation-first analytics profile combining Power BI Premium, DevOps, and process streamlining.',
       highlights: [
@@ -119,7 +119,7 @@
     {
       id: 'data-migration-cv',
       name: 'Data Migration CV',
-      file: 'data/Data Migration CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EQ53ogtYyVJMojrLigaKl80Bxkh72wDT3tDzFN7USu5otg?e=ZSR8nI',
       focus:
         'Data migration and analytics specialist with Power BI, automation, and stakeholder coordination.',
       highlights: [
@@ -152,7 +152,7 @@
     {
       id: 'customer-service-cv',
       name: 'Customer Service CV',
-      file: 'data/Customer Service CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EZy1tBeFsUhKnlsSZcDmHRwBcTkGQMyDYvSKxD6aNuvhxQ?e=G3fZvD',
       focus:
         'Customer success operator blending analytics dashboards with frontline escalation expertise.',
       highlights: [
@@ -180,7 +180,7 @@
     {
       id: 'it-support-cv',
       name: 'IT Support CV',
-      file: 'data/IT Support CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/Ed4Mq3WvwDlMq99ROTkmEjcBi2SIU3z3JZnjHuN-HTPyJA?e=u3DVlo',
       focus:
         'Service desk and QA professional with automation, DevOps hand-offs, and stakeholder comms.',
       highlights: [
@@ -215,7 +215,7 @@
     {
       id: 'it-support-resume',
       name: 'IT Support Resume',
-      file: 'data/IT Support Resume.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EUwYVxo5ObVLqfVK5xoaul4BlYIp5kihAM7LSqPQhzSWsA?e=Y4QVdp',
       focus:
         'Hands-on IT support practitioner with CI/CD exposure and compliance-driven onboarding.',
       highlights: [
@@ -250,7 +250,7 @@
     {
       id: 'sales-representative-cv',
       name: 'Sales Representative CV',
-      file: 'data/Sales Representative CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/Ed89DbgPrtNJuysthv_L4JUBAB90Ucb4i6wqlT6mmUhaSg?e=guWNyf',
       focus:
         'High-velocity SDR profile with compliance-ready messaging and analytics-informed demos.',
       highlights: [
@@ -284,7 +284,7 @@
     {
       id: 'sales-executive-cv',
       name: 'Sales Executive CV',
-      file: 'data/Sales Executive CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EQffVjK_CAdIkuUJkWpmpAYBbntWbLVErhRYszTs8rOf9A?e=8C57UP',
       focus:
         'Account executive and field sales hybrid with compliance-ready processes and analytics demos.',
       highlights: [
@@ -318,7 +318,7 @@
     {
       id: 'banking-consultant-cv',
       name: 'Banking Consultant CV',
-      file: 'data/Banking Consultant CV.docx',
+      file: 'https://1drv.ms/w/c/da864a40ece446cd/EQd4SR64P9NLrzkHXyA-pWMBqTqP_JZcOIqwhdCf1393Sw?e=5tf2aD',
       focus:
         'Banking and financial services consultant with analytics demos and compliance mastery.',
       highlights: [
