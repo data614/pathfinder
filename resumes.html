@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Résumé library • Pathfinder</title>
+    <title>CV and Cover Letter Library • Pathfinder</title>
     <link rel="stylesheet" href="assets/styles.css" />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -15,12 +15,42 @@
   <body>
     <header class="hero">
       <div class="hero__content">
-        <p class="hero__eyebrow">Résumé hub</p>
-        <h1>Open the right CV in seconds</h1>
-        <p class="hero__subtitle">
-          Pick the résumé that aligns with the job focus and it will launch in a new tab instantly.
-          Each card highlights the impact points and skills to echo in your application.
-        </p>
+        <div class="hero__toolbar">
+          <div class="hero__title-group">
+            <p class="hero__eyebrow">Résumé hub</p>
+            <h1>CV and Cover Letter Library</h1>
+            <p class="hero__subtitle">
+              Browse the latest CVs alongside cover-letter refresh cues for analytics and data operations roles. Launch each
+              document in a new tab and refresh the highlighted talking points before you send the application.
+            </p>
+          </div>
+          <nav class="hero__quick-links" aria-label="Primary navigation">
+            <a
+              class="hero__quick-link"
+              href="https://github.com/data614/pathfinder"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Github</a
+            >
+            <a class="hero__quick-link" href="cover-letter.html">Cover Letter Studio</a>
+            <a class="hero__quick-link" href="resumes.html" aria-current="page">Resume Library</a>
+            <a
+              class="hero__quick-link"
+              href="https://app.netlify.com/teams/contact-ucroaay/projects"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Deploy</a
+            >
+            <button
+              type="button"
+              class="hero__quick-link hero__quick-link--icon theme-toggle"
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+            >
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
         <div class="hero__resources" aria-label="Quick Pathfinder tools">
           <a class="hero__resource-link" href="cover-letter.html">
             <span class="hero__resource-icon" aria-hidden="true">
@@ -81,9 +111,6 @@
         <div class="hero__actions">
           <a class="hero__action" href="index.html">Back to job links</a>
           <a class="hero__action" href="cover-letter.html">Open cover-letter studio</a>
-          <button type="button" class="hero__action theme-toggle" id="theme-toggle" title="Toggle dark mode">
-            <span class="theme-toggle__icon"></span>
-          </button>
         </div>
       </div>
     </header>
@@ -92,11 +119,8 @@
       <section class="resume-viewer" aria-label="Résumé library">
         <header class="resume-viewer__header">
           <div class="resume-viewer__intro">
-            <h2>Résumé library</h2>
-            <p>
-              Click any résumé title below to open the document in a new tab. Use the highlights to tailor your
-              talking points before applying.
-            </p>
+            <h2>CV and Cover Letter Library</h2>
+            <p>Open the profile that matches the role focus and use the refresh cues to localise every submission.</p>
           </div>
         </header>
         <div class="resume-viewer__content">
@@ -106,6 +130,43 @@
           <div class="resume-viewer__list" id="resume-list">
             <p class="resume-viewer__empty">Loading résumé library…</p>
           </div>
+          <section class="cover-letter-bubbles" aria-label="Cover-letter refresh focus">
+            <h3>Cover-letter refresh cues</h3>
+            <div class="cover-letter-bubbles__grid">
+              <article class="cover-letter-bubble">
+                <h4>Data Engineer cover letter</h4>
+                <p>Update these talking points when you tailor the outreach:</p>
+                <ul>
+                  <li>Swap in the employer's data stack and quote the pipeline scale or latency targets from the job ad.</li>
+                  <li>Reference one automation or integration win that mirrors their tooling or cloud preferences.</li>
+                  <li>Close with a sentence that links your grant or delivery metrics to the team charter.</li>
+                </ul>
+                <a
+                  class="cover-letter-bubble__link"
+                  href="data/Cover%20Letter%201.docx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Open template</a
+                >
+              </article>
+              <article class="cover-letter-bubble">
+                <h4>Data Administrator cover letter</h4>
+                <p>Focus on these edits for data governance and admin roles:</p>
+                <ul>
+                  <li>Align the opening paragraph with the stewardship, cataloguing, or SQL ownership outlined in the post.</li>
+                  <li>Replace project names with the CRM, ERP, or compliance platforms the employer lists.</li>
+                  <li>Highlight one controls or audit improvement that matches their risk or reporting priorities.</li>
+                </ul>
+                <a
+                  class="cover-letter-bubble__link"
+                  href="data/Data%20Cover%20Letter.docx"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  >Open template</a
+                >
+              </article>
+            </div>
+          </section>
         </div>
       </section>
     </main>
