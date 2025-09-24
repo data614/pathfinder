@@ -36,9 +36,6 @@
   const lastUpdatedEl = document.getElementById('last-updated');
   const resumeListEl = document.getElementById('resume-list');
   const resumeFeedbackEl = document.getElementById('resume-feedback');
-  const resumeContentEl = document.getElementById('resume-content');
-  const resumeToggleButton = document.getElementById('resume-toggle');
-  const resumeSectionEl = document.querySelector('.resume-viewer');
 
   const REFRESH_INTERVAL_MS = 3 * 60 * 60 * 1000;
   const MAX_VISIBLE_JOBS = 20;
@@ -141,48 +138,7 @@
     resumeFeedbackEl.textContent = message;
   };
 
-  const updateResumeToggleState = (isVisible) => {
-    if (!resumeToggleButton) {
-      return;
-    }
-
-    resumeToggleButton.setAttribute('aria-expanded', isVisible ? 'true' : 'false');
-    resumeToggleButton.textContent = isVisible ? 'Hide résumés' : 'Show résumés';
-  };
-
-  const setResumeVisibility = (isVisible) => {
-    if (!resumeContentEl) {
-      updateResumeToggleState(false);
-      return;
-    }
-
-    if (isVisible) {
-      resumeContentEl.removeAttribute('hidden');
-      if (resumeSectionEl) {
-        resumeSectionEl.classList.remove('resume-viewer--collapsed');
-      }
-    } else {
-      resumeContentEl.setAttribute('hidden', '');
-      if (resumeSectionEl) {
-        resumeSectionEl.classList.add('resume-viewer--collapsed');
-      }
-    }
-
-    updateResumeToggleState(isVisible);
-  };
-
-  const toggleResumeVisibility = () => {
-    if (!resumeContentEl) {
-      return;
-    }
-
-    const shouldShow = resumeContentEl.hasAttribute('hidden');
-    setResumeVisibility(shouldShow);
-  };
-
   const openResume = (resumeIdentifier) => {
-    setResumeVisibility(true);
-
     const resume = resumeIndex.find(resumeIdentifier);
 
     if (!resume) {
@@ -258,23 +214,30 @@
         )}</div>`
       : '';
 
+    const resumeIdentifier = resume.id || resume.name;
+    const resumeTarget = resumeIdentifier ? escapeHtml(resumeIdentifier) : '';
+    const titleText = escapeHtml(resume.name || 'Résumé');
+
     const accessibleName = resume.name
       ? `Open the ${resume.name} résumé`
       : 'Open the résumé file';
 
+    const titleContent = resumeTarget
+      ? `<button type="button" class="resume-card__title-trigger" data-resume-target="${resumeTarget}" aria-label="${escapeHtml(
+          accessibleName,
+        )}">${titleText}</button>`
+      : `<span class="resume-card__title-text">${titleText}</span>`;
+
     return `
       <article class="resume-card">
         <header class="resume-card__header">
-          <h3>${escapeHtml(resume.name || 'Résumé')}</h3>
+          <h3 class="resume-card__title">
+            ${titleContent}
+          </h3>
         </header>
         ${focus}
         ${highlightMarkup}
         ${skillsMarkup}
-        <div class="resume-card__actions">
-          ${createResumeButton(resume.id || resume.name, 'Open résumé', {
-            ariaLabel: accessibleName,
-          })}
-        </div>
       </article>
     `;
   };
@@ -292,7 +255,7 @@
     }
 
     resumeListEl.innerHTML = resumeIndex.all.map((resume) => createResumeCard(resume)).join('');
-    showResumeMessage('Select a résumé to open it in a new tab.');
+    showResumeMessage('Click a résumé title to open it in a new tab.');
   };
 
   const createCard = (job) => {
@@ -426,13 +389,6 @@
 
   if (resumeListEl) {
     resumeListEl.addEventListener('click', handleResumeTriggerClick);
-  }
-
-  if (resumeToggleButton) {
-    resumeToggleButton.addEventListener('click', (event) => {
-      event.preventDefault();
-      toggleResumeVisibility();
-    });
   }
 
   window.openResume = openResume;

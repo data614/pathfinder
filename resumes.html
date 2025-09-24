@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Résumé library • Pathfinder</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Résumé hub</p>
+        <h1>Open the right CV in seconds</h1>
+        <p class="hero__subtitle">
+          Pick the résumé that aligns with the job focus and it will launch in a new tab instantly.
+          Each card highlights the impact points and skills to echo in your application.
+        </p>
+        <div class="hero__actions">
+          <a class="hero__action" href="index.html">Back to job links</a>
+          <a class="hero__action" href="cover-letter.html">Open cover-letter studio</a>
+          <button type="button" class="hero__action theme-toggle" id="theme-toggle" title="Toggle dark mode">
+            <span class="theme-toggle__icon"></span>
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="resume-viewer" aria-label="Résumé library">
+        <header class="resume-viewer__header">
+          <div class="resume-viewer__intro">
+            <h2>Résumé library</h2>
+            <p>
+              Click any résumé title below to open the document in a new tab. Use the highlights to tailor your
+              talking points before applying.
+            </p>
+          </div>
+        </header>
+        <div class="resume-viewer__content">
+          <p class="resume-viewer__feedback" id="resume-feedback" role="status" aria-live="polite">
+            Loading résumé options…
+          </p>
+          <div class="resume-viewer__list" id="resume-list">
+            <p class="resume-viewer__empty">Loading résumé library…</p>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <section class="tips tips--footer" aria-label="Résumé and cover-letter focus">
+        <h2>Résumé &amp; cover-letter focus</h2>
+        <ul>
+          <li>
+            Lead with the <strong>Data Analyst CV</strong> for Power BI, BI, and analytics postings. Mention your
+            <em>$1M grant win</em>, Power BI Premium deployments, and Jenkins/Redis automation.
+          </li>
+          <li>
+            Keep the <strong>Sales Representative CV</strong> ready for SDR and inside-sales roles. Emphasise
+            <em>20–30 calls/day</em>, a <em>10% conversion rate</em>, and Salesforce/Xero mastery.
+          </li>
+          <li>
+            Use the <strong>Customer Service or IT Support CV</strong> for CX, service desk, or QA opportunities.
+            Highlight <em>high-NPS support</em>, Salesforce data hygiene, and automation that reduced manual effort.
+          </li>
+          <li>
+            Reinforce <strong>Power BI Premium, Python, SQL, Power Automate,</strong> and <strong>ServiceNow</strong>
+            to capture ATS keywords across postings.
+          </li>
+        </ul>
+      </section>
+      <p>
+        Update the résumé bullet that best matches the job focus before applying. This page keeps the latest résumés in
+        one place so you can execute fast.
+      </p>
+    </footer>
+
+    <script src="assets/resumes.js" defer></script>
+    <script src="assets/script.js" defer></script>
+  </body>
+</html>

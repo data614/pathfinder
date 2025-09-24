@@ -33,6 +33,7 @@
           <span>Auto-refreshes every 3 hours to keep the shortlist current.</span>
         </div>
         <div class="hero__actions">
+          <a class="hero__action" href="resumes.html">Open résumé library</a>
           <a class="hero__action" href="cover-letter.html">Open cover-letter studio</a>
           <a
             class="hero__action hero__action--secondary"
@@ -55,43 +56,6 @@
 
       <section class="job-grid" id="job-list" aria-live="polite" aria-busy="true">
         <p class="loading">Loading job links…</p>
-      </section>
-
-      <section
-        class="resume-viewer resume-viewer--collapsed"
-        aria-label="Résumé library"
-      >
-        <header class="resume-viewer__header">
-          <div class="resume-viewer__intro">
-            <h2>Résumé library</h2>
-            <p>
-              Open the version that best matches the job before applying and keep
-              the talking points handy.
-            </p>
-          </div>
-          <button
-            type="button"
-            class="resume-viewer__toggle"
-            id="resume-toggle"
-            aria-expanded="false"
-            aria-controls="resume-content"
-          >
-            Show résumés
-          </button>
-        </header>
-        <div class="resume-viewer__content" id="resume-content" hidden>
-          <p
-            class="resume-viewer__feedback"
-            id="resume-feedback"
-            role="status"
-            aria-live="polite"
-          >
-            Select a résumé to open it in a new tab.
-          </p>
-          <div class="resume-viewer__list" id="resume-list">
-            <p class="resume-viewer__empty">Loading résumé library…</p>
-          </div>
-        </div>
       </section>
     </main>
 
