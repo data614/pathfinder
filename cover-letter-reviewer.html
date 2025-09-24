@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Cover letter reviewer · Pathfinder career labs</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/career-tools.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <div class="hero__toolbar">
+          <div class="hero__title-group">
+            <h1>Cover letter quality check</h1>
+            <p class="hero__subtitle">
+              Stress-test tone, structure, and alignment before you hit send. The reviewer highlights edits, subject lines,
+              and follow-up prompts that keep momentum with hiring teams.
+            </p>
+          </div>
+          <nav class="hero__quick-links" aria-label="Primary navigation">
+            <div class="hero__quick-links-grid">
+              <a class="hero__quick-link" href="index.html">Job Links</a>
+              <a class="hero__quick-link" href="resume-screener.html">Résumé Screener</a>
+              <a class="hero__quick-link" href="cover-letter-reviewer.html" aria-current="page">Cover Letter QA</a>
+              <a class="hero__quick-link" href="opportunity-radar.html">Opportunity Radar</a>
+            </div>
+            <button
+              type="button"
+              class="hero__quick-link hero__quick-link--icon theme-toggle"
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+            >
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="tool" id="cover-letter-reviewer">
+        <header class="tool__header">
+          <h2>Audit a cover letter before outreach</h2>
+          <p>
+            Paste the draft, optionally choose the résumé profile and job excerpt, and receive a tight set of edits with the
+            follow-up prompts ready for LinkedIn or recruiter outreach.
+          </p>
+        </header>
+
+        <form class="tool__form" id="cover-letter-reviewer-form" novalidate>
+          <div class="tool__field">
+            <label for="cover-letter-reviewer-profile">Résumé profile <span>(optional)</span></label>
+            <select id="cover-letter-reviewer-profile" name="resumeId" class="tool__select"></select>
+          </div>
+
+          <div class="tool__field">
+            <label for="cover-letter-reviewer-target">Target role</label>
+            <input
+              type="text"
+              id="cover-letter-reviewer-target"
+              name="targetRole"
+              class="tool__control"
+              placeholder="e.g. Customer Success Manager – Remote APAC"
+            />
+          </div>
+
+          <div class="tool__field">
+            <label for="cover-letter-reviewer-job">Job description excerpt <span>(optional)</span></label>
+            <textarea
+              id="cover-letter-reviewer-job"
+              name="jobDescription"
+              class="tool__textarea"
+              placeholder="Paste the sections you tailored this letter to."
+            ></textarea>
+          </div>
+
+          <div class="tool__field">
+            <label for="cover-letter-reviewer-preferences">Notes to respect <span>(optional)</span></label>
+            <textarea
+              id="cover-letter-reviewer-preferences"
+              name="preferences"
+              class="tool__textarea"
+              rows="3"
+              placeholder="Mention tone preferences, compliance guardrails, or audience specifics."
+            ></textarea>
+          </div>
+
+          <div class="tool__field">
+            <label for="cover-letter-reviewer-text">Cover letter draft</label>
+            <textarea
+              id="cover-letter-reviewer-text"
+              name="coverLetter"
+              class="tool__textarea"
+              required
+              placeholder="Paste the complete letter or opening note you plan to send."
+            ></textarea>
+            <p class="tool__hint">We never store drafts. The AI reviewer returns actionable edits immediately.</p>
+          </div>
+
+          <div class="tool__actions">
+            <button type="submit" class="tool__submit" id="cover-letter-reviewer-submit">Review cover letter</button>
+            <p class="tool__status" id="cover-letter-reviewer-status" hidden></p>
+          </div>
+        </form>
+
+        <div class="tool__results" id="cover-letter-reviewer-results" hidden>
+          <div class="result-header">
+            <div class="score-meter" id="cover-letter-reviewer-score">
+              <span class="score-meter__value">0</span>
+              <div class="score-meter__bar"><span class="score-meter__bar-fill"></span></div>
+              <span class="score-meter__label">Quality score</span>
+            </div>
+          </div>
+
+          <p class="result-card__body" id="cover-letter-reviewer-summary"></p>
+
+          <div class="cards-grid">
+            <article class="result-card">
+              <h3 class="result-card__title">Tone checkpoints</h3>
+              <ul class="result-card__list" id="cover-letter-reviewer-tone"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Structure &amp; flow</h3>
+              <ul class="result-card__list" id="cover-letter-reviewer-structure"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Alignment with the role</h3>
+              <ul class="result-card__list" id="cover-letter-reviewer-alignment"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Priority edits</h3>
+              <ul class="result-card__list" id="cover-letter-reviewer-edits"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Subject line ideas</h3>
+              <ul class="pill-list" id="cover-letter-reviewer-subjects"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Follow-up prompts</h3>
+              <ul class="result-card__list" id="cover-letter-reviewer-followup"></ul>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/resumes.js" defer></script>
+    <script src="assets/career-utils.js" defer></script>
+    <script src="assets/cover-letter-reviewer.js" defer></script>
+    <script src="assets/script.js" defer></script>
+  </body>
+</html>

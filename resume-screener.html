@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Résumé screener · Pathfinder career labs</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/career-tools.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <div class="hero__toolbar">
+          <div class="hero__title-group">
+            <h1>Résumé screener</h1>
+            <p class="hero__subtitle">
+              Run instant ATS-style diagnostics on every résumé profile. Paste updates, capture target role nuances, and
+              get an action list before you apply.
+            </p>
+          </div>
+          <nav class="hero__quick-links" aria-label="Primary navigation">
+            <div class="hero__quick-links-grid">
+              <a class="hero__quick-link" href="index.html">Job Links</a>
+              <a class="hero__quick-link" href="resume-screener.html" aria-current="page">Résumé Screener</a>
+              <a class="hero__quick-link" href="cover-letter-reviewer.html">Cover Letter QA</a>
+              <a class="hero__quick-link" href="opportunity-radar.html">Opportunity Radar</a>
+            </div>
+            <button
+              type="button"
+              class="hero__quick-link hero__quick-link--icon theme-toggle"
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+            >
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="tool" id="resume-screener">
+        <header class="tool__header">
+          <h2>Screen a résumé for a specific role</h2>
+          <p>
+            Pick a résumé profile from the library or paste custom content. Add the target role and optional job description so
+            the AI coach can flag gaps, keywords to mirror, and the talking points that deserve the spotlight.
+          </p>
+        </header>
+
+        <form class="tool__form" id="resume-screener-form" novalidate>
+          <div class="tool__field">
+            <label for="resume-screener-profile">Résumé profile</label>
+            <select id="resume-screener-profile" name="resumeId" class="tool__select"></select>
+            <p class="tool__hint">Loaded from the Pathfinder résumé library. Choose “Select résumé profile” to paste a custom version.</p>
+          </div>
+
+          <div class="tool__field">
+            <label for="resume-screener-text">Paste résumé text <span>(optional)</span></label>
+            <textarea
+              id="resume-screener-text"
+              name="resumeText"
+              class="tool__textarea"
+              placeholder="Paste the résumé body or new bullet points you want analysed."
+            ></textarea>
+            <p class="tool__hint">Anything you paste overrides the library highlights for this review.</p>
+          </div>
+
+          <div class="tool__field">
+            <label for="resume-screener-target">Target role / opportunity</label>
+            <input
+              type="text"
+              id="resume-screener-target"
+              name="targetRole"
+              class="tool__control"
+              placeholder="e.g. Senior Power BI Analyst – Utilities Transformation"
+            />
+          </div>
+
+          <div class="tool__field">
+            <label for="resume-screener-job">Job description excerpt <span>(optional)</span></label>
+            <textarea
+              id="resume-screener-job"
+              name="jobDescription"
+              class="tool__textarea"
+              placeholder="Paste the most relevant responsibilities or requirements to benchmark against."
+            ></textarea>
+          </div>
+
+          <div class="tool__field">
+            <label for="resume-screener-focus">Key capabilities to emphasise <span>(optional)</span></label>
+            <input
+              type="text"
+              id="resume-screener-focus"
+              name="focusAreas"
+              class="tool__control"
+              placeholder="Comma separated keywords — e.g. Power Automate, stakeholder workshops, cost reduction"
+            />
+          </div>
+
+          <div class="tool__field">
+            <label for="resume-screener-preferences">Notes &amp; guardrails <span>(optional)</span></label>
+            <textarea
+              id="resume-screener-preferences"
+              name="preferences"
+              class="tool__textarea"
+              rows="3"
+              placeholder="Mention relocation timing, compensation ranges, or anything the coach should factor in."
+            ></textarea>
+          </div>
+
+          <div class="tool__actions">
+            <button type="submit" class="tool__submit" id="resume-screener-submit">Run résumé screen</button>
+            <p class="tool__status" id="resume-screener-status" hidden></p>
+          </div>
+        </form>
+
+        <div class="tool__results" id="resume-screener-results" hidden>
+          <div class="result-header">
+            <div class="score-meter" id="resume-screener-score">
+              <span class="score-meter__value">0</span>
+              <div class="score-meter__bar"><span class="score-meter__bar-fill"></span></div>
+              <span class="score-meter__label">ATS readiness</span>
+            </div>
+          </div>
+
+          <p class="result-card__body" id="resume-screener-summary"></p>
+
+          <div class="cards-grid">
+            <article class="result-card">
+              <h3 class="result-card__title">Strengths to lead with</h3>
+              <ul class="result-card__list" id="resume-screener-strengths"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Risks &amp; red flags</h3>
+              <ul class="result-card__list" id="resume-screener-risks"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Keyword &amp; skill gaps</h3>
+              <ul class="result-card__list" id="resume-screener-keywords"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Action plan before applying</h3>
+              <ul class="result-card__list" id="resume-screener-actions"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">ATS keywords to mirror</h3>
+              <ul class="pill-list" id="resume-screener-ats"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Talking points &amp; interview angles</h3>
+              <ul class="result-card__list" id="resume-screener-interview"></ul>
+            </article>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <script src="assets/resumes.js" defer></script>
+    <script src="assets/career-utils.js" defer></script>
+    <script src="assets/resume-screener.js" defer></script>
+    <script src="assets/script.js" defer></script>
+  </body>
+</html>
