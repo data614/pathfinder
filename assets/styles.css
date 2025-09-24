@@ -1412,6 +1412,10 @@ html.dark-mode .job-card {
   box-shadow: 0 16px 32px rgba(15, 23, 42, 0.3);
 }
 
+html.dark-mode .job-card__summary {
+  color: var(--text-primary);
+}
+
 html.dark-mode .resume-viewer {
   background: rgba(15, 23, 42, 0.6);
   border-color: rgba(148, 163, 184, 0.2);
