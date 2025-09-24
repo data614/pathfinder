@@ -1,0 +1,338 @@
+.tool {
+  background: var(--surface);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow);
+  padding: clamp(1.75rem, 4vw, 2.5rem);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+}
+
+.tool__header {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  margin-bottom: clamp(1.25rem, 3vw, 2rem);
+}
+
+.tool__header h2 {
+  margin: 0;
+  font-size: clamp(1.6rem, 2.6vw, 2.1rem);
+  font-weight: 700;
+}
+
+.tool__header p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.tool__form {
+  display: grid;
+  gap: clamp(1rem, 2.4vw, 1.75rem);
+  margin-bottom: clamp(1.5rem, 3vw, 2.25rem);
+}
+
+.tool__field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+}
+
+.tool__field label {
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.tool__hint {
+  margin: 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
+.tool__control,
+.tool__textarea,
+.tool__select {
+  font: inherit;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--border);
+  padding: 0.7rem 0.85rem;
+  background: rgba(255, 255, 255, 0.88);
+  color: inherit;
+  transition: border-color 150ms ease, box-shadow 150ms ease;
+}
+
+.tool__textarea {
+  min-height: 160px;
+  resize: vertical;
+}
+
+.tool__control:focus,
+.tool__textarea:focus,
+.tool__select:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.25);
+}
+
+.tool__actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.tool__submit {
+  border: none;
+  border-radius: 999px;
+  background: var(--accent);
+  color: #f8fafc;
+  font-weight: 600;
+  padding: 0.65rem 1.6rem;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease, background 150ms ease;
+}
+
+.tool__submit:hover,
+.tool__submit:focus-visible {
+  transform: translateY(-1px);
+  box-shadow: 0 12px 24px rgba(37, 99, 235, 0.25);
+  outline: none;
+}
+
+.tool__submit:disabled {
+  opacity: 0.7;
+  cursor: progress;
+  transform: none;
+  box-shadow: none;
+}
+
+.tool__status {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.tool__status--error {
+  color: #dc2626;
+}
+
+.tool__status--success {
+  color: #047857;
+}
+
+.tool__results {
+  display: grid;
+  gap: clamp(1.25rem, 2.5vw, 1.75rem);
+}
+
+.result-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.score-meter {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-md);
+  background: var(--accent-soft);
+}
+
+.score-meter__value {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+.score-meter__label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+}
+
+.score-meter__bar {
+  height: 8px;
+  width: 140px;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.18);
+  overflow: hidden;
+}
+
+.score-meter__bar-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #2563eb, #312e81);
+  width: 0%;
+  transition: width 240ms ease;
+}
+
+.cards-grid {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+@media (min-width: 820px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.result-card {
+  background: rgba(15, 23, 42, 0.03);
+  border-radius: var(--radius-md);
+  padding: 1.15rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.result-card__title {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 600;
+}
+
+.result-card__body {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.result-card__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  line-height: 1.65;
+}
+
+.result-card__list li + li {
+  margin-top: 0.4rem;
+}
+
+.pill-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pill-list__item {
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--accent);
+  font-weight: 500;
+  padding: 0.35rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.85rem;
+}
+
+.opportunity-cards {
+  display: grid;
+  gap: clamp(1rem, 2vw, 1.5rem);
+}
+
+.opportunity-card {
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(37, 99, 235, 0.18);
+  padding: 1.1rem 1.25rem;
+  background: rgba(248, 250, 252, 0.85);
+  display: grid;
+  gap: 0.65rem;
+}
+
+.opportunity-card__title {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+}
+
+.opportunity-card__summary {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.opportunity-card__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.opportunity-card__confidence {
+  font-weight: 600;
+  font-size: 0.85rem;
+  padding: 0.3rem 0.65rem;
+  border-radius: 999px;
+  background: rgba(37, 99, 235, 0.12);
+  color: var(--accent);
+}
+
+.opportunity-card__reasons {
+  margin: 0;
+  padding-left: 1.15rem;
+  color: var(--text-muted);
+}
+
+.opportunity-card__footer {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  align-items: center;
+}
+
+.opportunity-card__link {
+  font-weight: 600;
+}
+
+@media (min-width: 960px) {
+  .opportunity-cards {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+html.dark-mode .tool {
+  background: rgba(15, 23, 42, 0.82);
+  box-shadow: none;
+}
+
+html.dark-mode .tool__control,
+html.dark-mode .tool__textarea,
+html.dark-mode .tool__select {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(148, 163, 184, 0.25);
+  color: #e2e8f0;
+}
+
+html.dark-mode .tool__hint {
+  color: rgba(226, 232, 240, 0.7);
+}
+
+html.dark-mode .result-card {
+  background: rgba(15, 23, 42, 0.55);
+}
+
+html.dark-mode .opportunity-card {
+  background: rgba(15, 23, 42, 0.55);
+  border-color: rgba(148, 163, 184, 0.22);
+}
+
+html.dark-mode .opportunity-card__summary,
+html.dark-mode .tool__header p,
+html.dark-mode .result-card__body {
+  color: rgba(226, 232, 240, 0.78);
+}
+
+html.dark-mode .score-meter {
+  background: rgba(37, 99, 235, 0.2);
+}
+
+html.dark-mode .score-meter__bar {
+  background: rgba(37, 99, 235, 0.22);
+}
+
+html.dark-mode .opportunity-card__confidence {
+  background: rgba(59, 130, 246, 0.16);
+  color: #93c5fd;
+}

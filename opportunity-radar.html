@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Opportunity radar · Pathfinder career labs</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="stylesheet" href="assets/career-tools.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <div class="hero__toolbar">
+          <div class="hero__title-group">
+            <h1>Opportunity radar</h1>
+            <p class="hero__subtitle">
+              Evaluate individual roles with match scoring and unlock curated live links where your profiles can win fast. Stay
+              organised with outreach hooks, ATS keywords, and the next steps to move each lead forward.
+            </p>
+          </div>
+          <nav class="hero__quick-links" aria-label="Primary navigation">
+            <div class="hero__quick-links-grid">
+              <a class="hero__quick-link" href="index.html">Job Links</a>
+              <a class="hero__quick-link" href="resume-screener.html">Résumé Screener</a>
+              <a class="hero__quick-link" href="cover-letter-reviewer.html">Cover Letter QA</a>
+              <a class="hero__quick-link" href="opportunity-radar.html" aria-current="page">Opportunity Radar</a>
+            </div>
+            <button
+              type="button"
+              class="hero__quick-link hero__quick-link--icon theme-toggle"
+              id="theme-toggle"
+              aria-label="Toggle dark mode"
+            >
+              <span class="theme-toggle__icon" aria-hidden="true"></span>
+            </button>
+          </nav>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <section class="tool" id="job-match">
+        <header class="tool__header">
+          <h2>Run a job match assessment</h2>
+          <p>
+            Drop a job URL or paste the core description, pick the résumé profile, and the radar returns match scoring,
+            narrative angles, risks, and tailored outreach hooks.
+          </p>
+        </header>
+
+        <form class="tool__form" id="job-match-form" novalidate>
+          <div class="tool__field">
+            <label for="job-match-profile">Résumé profile</label>
+            <select id="job-match-profile" name="resumeId" class="tool__select"></select>
+          </div>
+
+          <div class="tool__field">
+            <label for="job-match-url">Job URL <span>(optional)</span></label>
+            <input
+              type="url"
+              id="job-match-url"
+              name="jobUrl"
+              class="tool__control"
+              placeholder="https://careers.example.com/role"
+            />
+            <p class="tool__hint">If provided we fetch the page automatically. Otherwise paste the description below.</p>
+          </div>
+
+          <div class="tool__field">
+            <label for="job-match-target">Target role title <span>(optional)</span></label>
+            <input
+              type="text"
+              id="job-match-target"
+              name="targetRole"
+              class="tool__control"
+              placeholder="e.g. Employment Consultant – Inclusive Employment Australia"
+            />
+          </div>
+
+          <div class="tool__field">
+            <label for="job-match-description">Job description or notes <span>(optional)</span></label>
+            <textarea
+              id="job-match-description"
+              name="jobDescription"
+              class="tool__textarea"
+              placeholder="Paste responsibilities, selection criteria, or recruiter notes."
+            ></textarea>
+          </div>
+
+          <div class="tool__field">
+            <label for="job-match-preferences">Preferences &amp; guardrails <span>(optional)</span></label>
+            <textarea
+              id="job-match-preferences"
+              name="preferences"
+              class="tool__textarea"
+              rows="3"
+              placeholder="Mention location constraints, salary expectations, or deal-breakers."
+            ></textarea>
+          </div>
+
+          <div class="tool__actions">
+            <button type="submit" class="tool__submit" id="job-match-submit">Run match</button>
+            <p class="tool__status" id="job-match-status" hidden></p>
+          </div>
+        </form>
+
+        <div class="tool__results" id="job-match-results" hidden>
+          <div class="result-header">
+            <div class="score-meter" id="job-match-score">
+              <span class="score-meter__value">0</span>
+              <div class="score-meter__bar"><span class="score-meter__bar-fill"></span></div>
+              <span class="score-meter__label">Match score</span>
+            </div>
+          </div>
+
+          <p class="result-card__body" id="job-match-summary"></p>
+
+          <div class="cards-grid">
+            <article class="result-card">
+              <h3 class="result-card__title">Why this fits</h3>
+              <ul class="result-card__list" id="job-match-strengths"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Risks to mitigate</h3>
+              <ul class="result-card__list" id="job-match-risks"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Keywords to mirror</h3>
+              <ul class="pill-list" id="job-match-keywords"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Talking points</h3>
+              <ul class="result-card__list" id="job-match-talking"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Next actions</h3>
+              <ul class="result-card__list" id="job-match-actions"></ul>
+            </article>
+
+            <article class="result-card">
+              <h3 class="result-card__title">Outreach hooks</h3>
+              <ul class="result-card__list" id="job-match-outreach"></ul>
+            </article>
+          </div>
+
+          <div class="tool__header" id="job-match-recommendations-header" hidden>
+            <h2>Recommended live opportunities</h2>
+            <p>Use these links for high-probability outreach based on the match profile and region.</p>
+          </div>
+          <div class="opportunity-cards" id="job-match-recommendations" hidden></div>
+        </div>
+      </section>
+
+      <section class="tool" id="curated-opportunities">
+        <header class="tool__header">
+          <h2>Curated live opportunities</h2>
+          <p>Filter by résumé focus or location to jump directly into leads with proven fit narratives.</p>
+        </header>
+
+        <div class="tool__form">
+          <div class="tool__field">
+            <label for="opportunity-filter-resume">Résumé focus</label>
+            <select id="opportunity-filter-resume" class="tool__select"></select>
+          </div>
+
+          <div class="tool__field">
+            <label for="opportunity-filter-location">Location keyword <span>(optional)</span></label>
+            <input
+              type="text"
+              id="opportunity-filter-location"
+              class="tool__control"
+              placeholder="e.g. Sydney, Melbourne, Remote"
+            />
+          </div>
+
+          <div class="tool__actions">
+            <button type="button" class="tool__submit" id="opportunity-refresh">Refresh opportunities</button>
+            <p class="tool__status" id="opportunity-status" hidden></p>
+          </div>
+        </div>
+
+        <div class="opportunity-cards" id="opportunity-list"></div>
+      </section>
+    </main>
+
+    <script src="assets/resumes.js" defer></script>
+    <script src="assets/career-utils.js" defer></script>
+    <script src="assets/opportunity-radar.js" defer></script>
+    <script src="assets/script.js" defer></script>
+  </body>
+</html>
