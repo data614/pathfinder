@@ -9,6 +9,7 @@ const sanitizeHtml = require('sanitize-html');
 const OpenAI = require('openai');
 const { resumeLibrary, buildPromptProfile } = require('./resume-library');
 const { curatedOpportunities } = require('./opportunity-data');
+const { TtlCache } = require('./utils/cache');
 
 const DEFAULT_RATE_LIMIT_WINDOW_MS = Number(process.env.CAREER_COACH_RATE_WINDOW_MS) || 60_000;
 const DEFAULT_RATE_LIMIT_MAX = Number(process.env.CAREER_COACH_RATE_LIMIT) || 10;
@@ -18,6 +19,13 @@ const USER_AGENT =
   process.env.CAREER_COACH_USER_AGENT ||
   'PathfinderCareerCoach/1.0 (+https://github.com/your-org/pathfinder)';
 const MAX_CONTEXT_CHARS = Number(process.env.CAREER_COACH_MAX_CONTEXT_CHARS) || 8_000;
+const JOB_DOCUMENT_CACHE_TTL_MS = Number(process.env.CAREER_COACH_JOB_CACHE_TTL_MS) || 3 * 60 * 60 * 1000;
+const JOB_DOCUMENT_CACHE_MAX_ENTRIES = Number(process.env.CAREER_COACH_JOB_CACHE_MAX_ENTRIES) || 48;
+
+const jobDocumentCache = new TtlCache({
+  defaultTtlMs: JOB_DOCUMENT_CACHE_TTL_MS,
+  maxEntries: JOB_DOCUMENT_CACHE_MAX_ENTRIES,
+});
 
 const RESUME_REVIEW_SCHEMA = {
   name: 'resume_readiness_report',
@@ -352,38 +360,52 @@ function createJobMatchPrompt(payload = {}) {
 }
 
 async function fetchJobDocument(url, timeoutMs) {
-  const controller = new AbortController();
-  const timer = setTimeout(() => {
-    try {
-      controller.abort();
-    } catch (error) {
-      // ignore abort errors
-    }
-  }, timeoutMs);
+  const cacheKey = typeof url === 'string' ? url : url?.toString();
 
-  try {
-    const response = await fetch(url, {
-      method: 'GET',
-      redirect: 'follow',
-      headers: {
-        'User-Agent': USER_AGENT,
-        Accept: 'text/html,application/xhtml+xml',
-      },
-      signal: controller.signal,
-    });
-
-    if (!response.ok) {
-      throw new Error(`Job page responded with status ${response.status}`);
-    }
-
-    const html = await response.text();
-    return {
-      html,
-      finalUrl: response.url || url,
-    };
-  } finally {
-    clearTimeout(timer);
+  if (!cacheKey) {
+    throw new Error('A job URL is required.');
   }
+
+  const effectiveTimeout = Number(timeoutMs) || JOB_FETCH_TIMEOUT_MS;
+
+  return jobDocumentCache.remember(
+    cacheKey,
+    async () => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => {
+        try {
+          controller.abort();
+        } catch (error) {
+          // Ignore abort errors triggered after completion.
+        }
+      }, effectiveTimeout);
+
+      try {
+        const response = await fetch(cacheKey, {
+          method: 'GET',
+          redirect: 'follow',
+          headers: {
+            'User-Agent': USER_AGENT,
+            Accept: 'text/html,application/xhtml+xml',
+          },
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Job page responded with status ${response.status}`);
+        }
+
+        const html = await response.text();
+        return {
+          html,
+          finalUrl: response.url || cacheKey,
+        };
+      } finally {
+        clearTimeout(timer);
+      }
+    },
+    { ttlMs: JOB_DOCUMENT_CACHE_TTL_MS },
+  );
 }
 
 function deriveJobSummary(textContent) {
