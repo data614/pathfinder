@@ -9,6 +9,7 @@ const sanitizeHtml = require('sanitize-html');
 const OpenAI = require('openai');
 const { resumeLibrary } = require('./resume-library');
 const { COVER_LETTER_SCHEMA, createCoverLetterPrompt } = require('./prompt-template');
+const { TtlCache } = require('./utils/cache');
 
 const DEFAULT_RATE_LIMIT_WINDOW_MS = Number(process.env.JOB_INTEL_RATE_WINDOW_MS) || 60_000;
 const DEFAULT_RATE_LIMIT_MAX = Number(process.env.JOB_INTEL_RATE_LIMIT) || 5;
@@ -17,11 +18,22 @@ const RESEARCH_TIMEOUT_MS = Number(process.env.JOB_RESEARCH_TIMEOUT_MS) || 15_00
 const OPENAI_TIMEOUT_MS = Number(process.env.JOB_OPENAI_TIMEOUT_MS) || 60_000;
 const HEARTBEAT_INTERVAL_MS = Number(process.env.JOB_INTEL_HEARTBEAT_MS) || 20_000;
 const RESEARCH_CACHE_TTL_MS = Number(process.env.JOB_RESEARCH_CACHE_TTL_MS) || 6 * 60 * 60 * 1000;
+const RESEARCH_CACHE_MAX_ENTRIES = Number(process.env.JOB_RESEARCH_CACHE_MAX_ENTRIES) || 120;
+const JOB_PAGE_CACHE_TTL_MS = Number(process.env.JOB_PAGE_CACHE_TTL_MS) || 2 * 60 * 60 * 1000;
+const JOB_PAGE_CACHE_MAX_ENTRIES = Number(process.env.JOB_PAGE_CACHE_MAX_ENTRIES) || 48;
 const USER_AGENT =
   process.env.JOB_INTEL_USER_AGENT ||
   'PathfinderJobIntelBot/1.0 (+https://github.com/your-org/pathfinder)';
 
-const researchCache = new Map();
+const researchCache = new TtlCache({
+  defaultTtlMs: RESEARCH_CACHE_TTL_MS,
+  maxEntries: RESEARCH_CACHE_MAX_ENTRIES,
+});
+
+const jobPageCache = new TtlCache({
+  defaultTtlMs: JOB_PAGE_CACHE_TTL_MS,
+  maxEntries: JOB_PAGE_CACHE_MAX_ENTRIES,
+});
 
 
 function sanitizeText(value) {
@@ -123,25 +135,60 @@ function checkAuthentication(req, configuredKey) {
 }
 
 async function downloadDocument(url, signal) {
-  const response = await fetch(url, {
-    method: 'GET',
-    redirect: 'follow',
-    headers: {
-      'User-Agent': USER_AGENT,
-      Accept: 'text/html,application/xhtml+xml',
-    },
-    signal,
-  });
+  const cacheKey = typeof url === 'string' ? url : url?.toString();
 
-  if (!response.ok) {
-    throw new Error(`Job page responded with status ${response.status}`);
+  if (!cacheKey) {
+    throw new Error('A job URL is required.');
   }
 
-  const html = await response.text();
-  return {
-    html,
-    finalUrl: response.url || url,
-  };
+  return jobPageCache.remember(
+    cacheKey,
+    async () => {
+      const controller = new AbortController();
+      const abortHandler = () => {
+        try {
+          controller.abort();
+        } catch (error) {
+          // Ignore abort timing errors.
+        }
+      };
+
+      if (signal) {
+        if (signal.aborted) {
+          abortHandler();
+        } else {
+          signal.addEventListener('abort', abortHandler);
+        }
+      }
+
+      try {
+        const response = await fetch(cacheKey, {
+          method: 'GET',
+          redirect: 'follow',
+          headers: {
+            'User-Agent': USER_AGENT,
+            Accept: 'text/html,application/xhtml+xml',
+          },
+          signal: controller.signal,
+        });
+
+        if (!response.ok) {
+          throw new Error(`Job page responded with status ${response.status}`);
+        }
+
+        const html = await response.text();
+        return {
+          html,
+          finalUrl: response.url || cacheKey,
+        };
+      } finally {
+        if (signal) {
+          signal.removeEventListener('abort', abortHandler);
+        }
+      }
+    },
+    { ttlMs: JOB_PAGE_CACHE_TTL_MS },
+  );
 }
 
 function extractJobDetails(html, url) {
@@ -395,25 +442,19 @@ function deriveCompanyFromText(rawText) {
 }
 
 function fromCache(cacheKey) {
-  const cached = researchCache.get(cacheKey);
-
-  if (!cached) {
+  if (!cacheKey || !researchCache.has(cacheKey)) {
     return null;
   }
 
-  if (cached.expires < Date.now()) {
-    researchCache.delete(cacheKey);
-    return null;
-  }
-
-  return cached.payload;
+  return researchCache.get(cacheKey) || null;
 }
 
 function storeCache(cacheKey, payload) {
-  researchCache.set(cacheKey, {
-    payload,
-    expires: Date.now() + RESEARCH_CACHE_TTL_MS,
-  });
+  if (!cacheKey) {
+    return;
+  }
+
+  researchCache.set(cacheKey, payload, { ttlMs: RESEARCH_CACHE_TTL_MS });
 }
 
 async function querySearchApi(query, signal) {

@@ -40,28 +40,77 @@
   const REFRESH_INTERVAL_MS = 3 * 60 * 60 * 1000;
   const MAX_VISIBLE_JOBS = 20;
 
-  const escapeHtml = (value) => {
+  const toText = (value) => {
     if (value === null || value === undefined) {
       return '';
     }
 
-    return value
-      .toString()
-      .replace(/&/g, '&amp;')
-      .replace(/</g, '&lt;')
-      .replace(/>/g, '&gt;')
-      .replace(/"/g, '&quot;')
-      .replace(/'/g, '&#39;');
+    return value.toString().trim();
   };
 
-  const createBadgeGroup = (items, className = 'badge') =>
-    (Array.isArray(items) ? items : [])
-      .filter((item) => item !== null && item !== undefined && item !== '')
-      .map((item) => `<span class="${className}">${escapeHtml(item)}</span>`)
-      .join('');
+  const normaliseList = (items, limit) => {
+    if (!Array.isArray(items)) {
+      return [];
+    }
+
+    const sanitised = items.map((item) => toText(item)).filter(Boolean);
+
+    if (typeof limit === 'number' && Number.isFinite(limit)) {
+      return sanitised.slice(0, limit);
+    }
+
+    return sanitised;
+  };
+
+  const createElement = (tagName, className, textContent) => {
+    const element = document.createElement(tagName);
+
+    if (className) {
+      element.className = className;
+    }
+
+    if (textContent !== undefined && textContent !== null) {
+      element.textContent = textContent;
+    }
+
+    return element;
+  };
+
+  const createBadgeContainer = (items, containerClass, badgeClass) => {
+    const entries = normaliseList(items);
+
+    if (!entries.length) {
+      return null;
+    }
+
+    const container = createElement('div', containerClass);
+    entries.forEach((entry) => {
+      const badge = createElement('span', badgeClass, entry);
+      container.appendChild(badge);
+    });
+    return container;
+  };
+
+  const scheduleIdle = (task) => {
+    if (typeof window.requestIdleCallback === 'function') {
+      window.requestIdleCallback(
+        () => {
+          task();
+        },
+        { timeout: 250 },
+      );
+      return;
+    }
+
+    setTimeout(task, 0);
+  };
 
   const resumeLibrary = Array.isArray(window.resumeLibrary)
     ? window.resumeLibrary.filter((resume) => resume && typeof resume === 'object')
+    : [];
+
+  const jobLibrary = Array.isArray(window.jobLinks)
+    ? window.jobLinks.filter((job) => job && typeof job === 'object')
     : [];
 
   const resumeIndex = (() => {
@@ -118,11 +167,13 @@
     if (!resumeFeedbackEl) return;
 
     const { type, link } = options;
-    resumeFeedbackEl.innerHTML = '';
+    const text = toText(message);
+
+    resumeFeedbackEl.textContent = '';
     resumeFeedbackEl.classList.remove('resume-viewer__feedback--error');
     resumeFeedbackEl.classList.remove('resume-viewer__feedback--success');
 
-    if (!message) {
+    if (!text) {
       return;
     }
 
@@ -134,37 +185,35 @@
 
     if (link && link.href) {
       const messageSpan = document.createElement('span');
-      messageSpan.textContent = `${message} `;
+      messageSpan.textContent = `${text} `;
       const anchor = document.createElement('a');
       anchor.href = link.href;
-      anchor.textContent = link.label || 'Download the résumé';
+      anchor.textContent = toText(link.label) || 'Download the résumé';
       anchor.target = '_blank';
       anchor.rel = 'noopener noreferrer';
       resumeFeedbackEl.append(messageSpan, anchor, document.createTextNode('.'));
       return;
     }
 
-    resumeFeedbackEl.textContent = message;
+    resumeFeedbackEl.textContent = text;
   };
 
   const openResume = (resumeIdentifier) => {
     const resume = resumeIndex.find(resumeIdentifier);
 
     if (!resume) {
-      showResumeMessage(
-        `We couldn't find a résumé named “${resumeIdentifier || 'unknown'}”.`,
-        { type: 'error' },
-      );
+      const lookupName = toText(resumeIdentifier) || 'unknown';
+      showResumeMessage(`We couldn't find a résumé named “${lookupName}”.`, { type: 'error' });
       return;
     }
 
     const resumeUrl = buildResumeUrl(resume.file);
 
     if (!resumeUrl) {
-      showResumeMessage(
-        `The ${resume.name || 'selected'} résumé does not have a file attached yet.`,
-        { type: 'error' },
-      );
+      const resumeName = toText(resume.name) || 'selected';
+      showResumeMessage(`The ${resumeName} résumé does not have a file attached yet.`, {
+        type: 'error',
+      });
       return;
     }
 
@@ -173,82 +222,86 @@
       openedWindow.opener = null;
     }
 
-    showResumeMessage(`Opening ${resume.name}. If it doesn't appear,`, {
+    const friendlyName = toText(resume.name) || 'the selected résumé';
+    showResumeMessage(`Opening ${friendlyName}. If it doesn't appear,`, {
       type: 'success',
       link: { href: resumeUrl, label: 'download it directly' },
     });
   };
 
   const createResumeButton = (resumeIdentifier, label, options = {}) => {
-    if (!resumeIdentifier) {
-      return '';
+    const identifier = toText(resumeIdentifier);
+
+    if (!identifier) {
+      return null;
     }
 
-    const buttonLabel = label ? label.toString() : 'Open résumé';
-    const ariaLabel =
-      options.ariaLabel && options.ariaLabel.toString().trim()
-        ? ` aria-label="${escapeHtml(options.ariaLabel)}"`
-        : '';
+    const button = createElement('button', 'resume-link', toText(label) || 'Open résumé');
+    button.type = 'button';
+    button.dataset.resumeTarget = identifier;
 
-    return `<button type="button" class="resume-link" data-resume-target="${escapeHtml(
-      resumeIdentifier,
-    )}"${ariaLabel}>${escapeHtml(buttonLabel)}</button>`;
+    const ariaLabel = toText(options.ariaLabel);
+    if (ariaLabel) {
+      button.setAttribute('aria-label', ariaLabel);
+    }
+
+    return button;
   };
 
   const createResumeCard = (resume) => {
     if (!resume) {
-      return '';
+      return null;
     }
 
-    const focus = typeof resume.focus === 'string' && resume.focus.trim()
-      ? `<p class="resume-card__focus">${escapeHtml(resume.focus)}</p>`
-      : '';
+    const card = createElement('article', 'resume-card');
+    const header = createElement('header', 'resume-card__header');
+    const title = createElement('h3', 'resume-card__title');
+    const resumeIdentifier = toText(resume.id || resume.name);
+    const resumeName = toText(resume.name) || 'Résumé';
 
-    const highlights = Array.isArray(resume.highlights)
-      ? resume.highlights.filter((item) => item && item.toString().trim())
-      : [];
-    const highlightMarkup = highlights.length
-      ? `<ul class="resume-card__highlights">${highlights
-          .map((highlight) => `<li>${escapeHtml(highlight)}</li>`)
-          .join('')}</ul>`
-      : '';
+    if (resumeIdentifier) {
+      const trigger = createElement('button', 'resume-card__title-trigger', resumeName);
+      trigger.type = 'button';
+      trigger.dataset.resumeTarget = resumeIdentifier;
+      trigger.setAttribute(
+        'aria-label',
+        resumeName ? `Open the ${resumeName} résumé` : 'Open the résumé file',
+      );
+      title.appendChild(trigger);
+    } else {
+      const span = createElement('span', 'resume-card__title-text', resumeName);
+      title.appendChild(span);
+    }
 
-    const skills = Array.isArray(resume.skills)
-      ? resume.skills.filter((skill) => skill && skill.toString().trim()).slice(0, 6)
-      : [];
-    const skillsMarkup = skills.length
-      ? `<div class="resume-card__skills">${createBadgeGroup(
-          skills,
-          'badge badge--skill',
-        )}</div>`
-      : '';
+    header.appendChild(title);
+    card.appendChild(header);
 
-    const resumeIdentifier = resume.id || resume.name;
-    const resumeTarget = resumeIdentifier ? escapeHtml(resumeIdentifier) : '';
-    const titleText = escapeHtml(resume.name || 'Résumé');
+    const focusText = toText(resume.focus);
+    if (focusText) {
+      card.appendChild(createElement('p', 'resume-card__focus', focusText));
+    }
 
-    const accessibleName = resume.name
-      ? `Open the ${resume.name} résumé`
-      : 'Open the résumé file';
+    const highlights = normaliseList(resume.highlights);
+    if (highlights.length) {
+      const list = createElement('ul', 'resume-card__highlights');
+      highlights.forEach((highlight) => {
+        const item = createElement('li', null, highlight);
+        list.appendChild(item);
+      });
+      card.appendChild(list);
+    }
 
-    const titleContent = resumeTarget
-      ? `<button type="button" class="resume-card__title-trigger" data-resume-target="${resumeTarget}" aria-label="${escapeHtml(
-          accessibleName,
-        )}">${titleText}</button>`
-      : `<span class="resume-card__title-text">${titleText}</span>`;
+    const skills = normaliseList(resume.skills, 6);
+    if (skills.length) {
+      const skillsContainer = createElement('div', 'resume-card__skills');
+      skills.forEach((skill) => {
+        const badge = createElement('span', 'badge badge--skill', skill);
+        skillsContainer.appendChild(badge);
+      });
+      card.appendChild(skillsContainer);
+    }
 
-    return `
-      <article class="resume-card">
-        <header class="resume-card__header">
-          <h3 class="resume-card__title">
-            ${titleContent}
-          </h3>
-        </header>
-        ${focus}
-        ${highlightMarkup}
-        ${skillsMarkup}
-      </article>
-    `;
+    return card;
   };
 
   const renderResumeLibrary = () => {
@@ -257,76 +310,89 @@
     }
 
     if (!resumeIndex.all.length) {
-      resumeListEl.innerHTML =
-        '<p class="resume-viewer__empty">Upload résumé documents to the data folder to see them here.</p>';
+      const emptyState = createElement(
+        'p',
+        'resume-viewer__empty',
+        'Upload résumé documents to the data folder to see them here.',
+      );
+      resumeListEl.replaceChildren(emptyState);
       showResumeMessage('Upload résumé documents to the data folder to see them here.');
       return;
     }
 
-    resumeListEl.innerHTML = resumeIndex.all.map((resume) => createResumeCard(resume)).join('');
+    const fragment = document.createDocumentFragment();
+    resumeIndex.all.forEach((resume) => {
+      const card = createResumeCard(resume);
+      if (card) {
+        fragment.appendChild(card);
+      }
+    });
+    resumeListEl.replaceChildren(fragment);
     showResumeMessage('Click a résumé title to open it in a new tab.');
   };
 
-  const createCard = (job) => {
+  const createJobCard = (job) => {
     if (!job) {
-      return '';
+      return null;
     }
 
-    const locations = Array.isArray(job.locations)
-      ? job.locations.filter((item) => item && item.toString().trim())
-      : [];
-    const focusAreas = Array.isArray(job.focusAreas)
-      ? job.focusAreas.filter((item) => item && item.toString().trim())
-      : [];
+    const card = createElement('article', 'job-card');
 
-    const locationBadges = locations.length
-      ? `<div class="job-card__meta">${createBadgeGroup(
-          locations,
-          'badge badge--location',
-        )}</div>`
-      : '';
+    const locationContainer = createBadgeContainer(
+      job.locations,
+      'job-card__meta',
+      'badge badge--location',
+    );
+    if (locationContainer) {
+      card.appendChild(locationContainer);
+    }
 
-    const focusBadges = focusAreas.length
-      ? `<div class="job-card__meta">${createBadgeGroup(focusAreas)}</div>`
-      : '';
+    const titleElement = createElement('h3', 'job-card__title');
+    const jobTitle = toText(job.title) || 'Curated job search';
+    const jobUrl = toText(job.url);
+    if (jobUrl) {
+      const link = createElement('a', 'job-card__title-link', jobTitle);
+      link.href = jobUrl;
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+      titleElement.appendChild(link);
+    } else {
+      titleElement.textContent = jobTitle;
+    }
+    card.appendChild(titleElement);
+
+    const summary = toText(job.summary);
+    const summaryElement = createElement('p', 'job-card__summary', summary);
+    card.appendChild(summaryElement);
 
     const resumeInfo = job.resume ? resumeIndex.find(job.resume) : null;
-    const resumeTarget = resumeInfo ? resumeInfo.id : job.resume;
-    const resumeLabel = resumeInfo ? resumeInfo.name : job.resume;
+    const resumeTarget = toText(resumeInfo ? resumeInfo.id : job.resume);
+    const resumeLabel = toText(resumeInfo ? resumeInfo.name : job.resume);
 
-    const resumeBlock =
-      resumeLabel && resumeTarget
-        ? `<div class="job-card__resume">
-            ${createResumeButton(resumeTarget, resumeLabel, {
-              ariaLabel: resumeLabel ? `View the ${resumeLabel} résumé` : 'View résumé',
-            })}
-          </div>`
-        : '';
+    if (resumeTarget && resumeLabel) {
+      const resumeContainer = createElement('div', 'job-card__resume');
+      const button = createResumeButton(resumeTarget, resumeLabel, {
+        ariaLabel: resumeLabel ? `View the ${resumeLabel} résumé` : 'View résumé',
+      });
+      if (button) {
+        resumeContainer.appendChild(button);
+        card.appendChild(resumeContainer);
+      }
+    }
 
-    const jobUrl = typeof job.url === 'string' && job.url.trim() ? job.url.trim() : '';
-    const safeJobUrl = jobUrl ? escapeHtml(jobUrl) : '';
-    const title = escapeHtml(job.title || 'Curated job search');
-    const summary = escapeHtml(job.summary || '');
-    const titleContent = jobUrl
-      ? `<a class="job-card__title-link" href="${safeJobUrl}" target="_blank" rel="noopener noreferrer">${title}</a>`
-      : title;
+    const focusContainer = createBadgeContainer(job.focusAreas, 'job-card__meta', 'badge');
+    if (focusContainer) {
+      card.appendChild(focusContainer);
+    }
 
-    return `
-      <article class="job-card">
-        ${locationBadges}
-        <h3 class="job-card__title">${titleContent}</h3>
-        <p class="job-card__summary">${summary}</p>
-        ${resumeBlock}
-        ${focusBadges}
-      </article>
-    `;
+    return card;
   };
 
   const updateResultsMeta = (visibleCount, totalCount) => {
     if (!resultsMetaEl) return;
 
     if (!visibleCount) {
-      resultsMetaEl.innerHTML =
+      resultsMetaEl.textContent =
         'No curated job searches available right now. We check for new leads every 3 hours.';
       return;
     }
@@ -336,7 +402,9 @@
         ? ` from ${totalCount} tracked feed${totalCount === 1 ? '' : 's'}`
         : '';
 
-    resultsMetaEl.innerHTML = `<strong>Top ${visibleCount}</strong> curated job searches${trackedDetail}. Updates automatically every 3 hours.`;
+    const strong = createElement('strong', null, `Top ${visibleCount}`);
+    const detailText = ` curated job searches${trackedDetail}. Updates automatically every 3 hours.`;
+    resultsMetaEl.replaceChildren(strong, document.createTextNode(detailText));
   };
 
   const renderJobs = () => {
@@ -344,20 +412,43 @@
       return;
     }
 
-    const allJobs = Array.isArray(window.jobLinks) ? window.jobLinks : [];
-    const topJobs = allJobs.slice(0, MAX_VISIBLE_JOBS);
-
     jobListEl.setAttribute('aria-busy', 'false');
 
-    if (!topJobs.length) {
-      jobListEl.innerHTML =
-        '<p class="empty-state">No job links are ready yet. New leads load in automatically within the next refresh window.</p>';
-      updateResultsMeta(0, allJobs.length);
+    if (!jobLibrary.length) {
+      const emptyState = createElement(
+        'p',
+        'empty-state',
+        'No job links are ready yet. New leads load in automatically within the next refresh window.',
+      );
+      jobListEl.replaceChildren(emptyState);
+      updateResultsMeta(0, 0);
       return;
     }
 
-    jobListEl.innerHTML = topJobs.map((job) => createCard(job)).join('');
-    updateResultsMeta(topJobs.length, allJobs.length);
+    const fragment = document.createDocumentFragment();
+    let renderedCount = 0;
+
+    for (let index = 0; index < jobLibrary.length && renderedCount < MAX_VISIBLE_JOBS; index += 1) {
+      const jobCard = createJobCard(jobLibrary[index]);
+      if (jobCard) {
+        fragment.appendChild(jobCard);
+        renderedCount += 1;
+      }
+    }
+
+    if (!renderedCount) {
+      const emptyState = createElement(
+        'p',
+        'empty-state',
+        'No job links are ready yet. New leads load in automatically within the next refresh window.',
+      );
+      jobListEl.replaceChildren(emptyState);
+      updateResultsMeta(0, jobLibrary.length);
+      return;
+    }
+
+    jobListEl.replaceChildren(fragment);
+    updateResultsMeta(renderedCount, jobLibrary.length);
   };
 
   const formatTimestamp = (date) =>
@@ -375,9 +466,18 @@
     lastUpdatedEl.textContent = formatTimestamp(new Date());
   };
 
-  const refresh = () => {
+  const runRefresh = () => {
     renderJobs();
     updateLastUpdated();
+  };
+
+  const scheduleRefresh = () => {
+    if (typeof window.requestAnimationFrame === 'function') {
+      window.requestAnimationFrame(runRefresh);
+      return;
+    }
+
+    runRefresh();
   };
 
   const handleResumeTriggerClick = (event) => {
@@ -390,7 +490,7 @@
     openResume(resumeIdentifier);
   };
 
-  renderResumeLibrary();
+  scheduleIdle(renderResumeLibrary);
 
   if (jobListEl) {
     jobListEl.addEventListener('click', handleResumeTriggerClick);
@@ -403,6 +503,6 @@
   window.openResume = openResume;
   window.viewResume = openResume;
 
-  refresh();
-  setInterval(refresh, REFRESH_INTERVAL_MS);
+  scheduleRefresh();
+  setInterval(scheduleRefresh, REFRESH_INTERVAL_MS);
 })();
