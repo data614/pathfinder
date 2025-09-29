@@ -215,7 +215,8 @@
     {
       id: 'it-support-resume',
       name: 'IT Support Resume',
-      file: 'https://1drv.ms/w/c/da864a40ece446cd/EUwYVxo5ObVLqfVK5xoaul4BlYIp5kihAM7LSqPQhzSWsA?e=Y4QVdp',
+      file:
+        'https://onedrive.live.com/personal/da864a40ece446cd/_layouts/15/doc.aspx?resid=0b5a6e1c-954e-4888-8799-73dcf4f5f75b&cid=da864a40ece446cd',
       focus:
         'Hands-on IT support practitioner with CI/CD exposure and compliance-driven onboarding.',
       highlights: [
