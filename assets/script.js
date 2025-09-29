@@ -328,7 +328,7 @@
       }
     });
     resumeListEl.replaceChildren(fragment);
-    showResumeMessage('Click a résumé title to open it in a new tab.');
+    showResumeMessage('');
   };
 
   const createJobCard = (job) => {
