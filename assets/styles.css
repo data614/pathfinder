@@ -1241,6 +1241,35 @@ a:focus {
   color: var(--accent);
 }
 
+.job-card__title-button {
+  background: none;
+  border: none;
+  color: inherit;
+  text-decoration: none;
+  font: inherit;
+  font-size: 1.05rem;
+  font-weight: 600;
+  line-height: 1.5;
+  text-align: left;
+  cursor: pointer;
+  padding: 0;
+  transition: color 160ms ease;
+  width: 100%;
+}
+
+.job-card__title-button:hover,
+.job-card__title-button:focus {
+  color: var(--accent);
+  outline: none;
+}
+
+.job-card__keywords {
+  color: var(--text-muted);
+  font-size: 0.85rem;
+  line-height: 1.4;
+  font-style: italic;
+}
+
 .loading,
 .empty-state {
   font-size: 1rem;
@@ -1469,6 +1498,15 @@ a:focus {
     color: #bfdbfe;
   }
 
+  .job-card__title-button:hover,
+  .job-card__title-button:focus {
+    color: #60a5fa;
+  }
+
+  .job-card__keywords {
+    color: #94a3b8;
+  }
+
   .badge {
     background: rgba(37, 99, 235, 0.2);
     color: #bfdbfe;
@@ -1482,5 +1520,279 @@ a:focus {
 
   .footer {
     color: #94a3b8;
+  }
+}
+
+/* Hall of Fame Styles */
+.hall-of-fame {
+  margin-top: 3rem;
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.05), rgba(5, 150, 105, 0.08));
+  border: 2px solid rgba(16, 185, 129, 0.2);
+  border-radius: var(--radius-lg);
+  padding: clamp(1.75rem, 3vw, 2.5rem);
+  display: grid;
+  gap: 2rem;
+}
+
+.hall-of-fame__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.hall-of-fame__intro h2 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(1.4rem, 3vw, 1.8rem);
+  color: #047857;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.hall-of-fame__intro p {
+  margin: 0;
+  color: var(--text-muted);
+  line-height: 1.6;
+  max-width: 600px;
+}
+
+.hall-of-fame__actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.btn-add-success,
+.btn-analyze {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+}
+
+.btn-add-success {
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.btn-add-success:hover {
+  background: linear-gradient(135deg, #059669, #047857);
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.btn-analyze {
+  background: rgba(16, 185, 129, 0.1);
+  color: #047857;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.btn-analyze:hover {
+  background: rgba(16, 185, 129, 0.2);
+  border-color: rgba(16, 185, 129, 0.5);
+}
+
+.hall-of-fame__content {
+  min-height: 200px;
+}
+
+.success-placeholder {
+  text-align: center;
+  padding: 3rem 2rem;
+  background: rgba(16, 185, 129, 0.05);
+  border: 2px dashed rgba(16, 185, 129, 0.3);
+  border-radius: var(--radius-md);
+}
+
+.success-placeholder h3 {
+  margin: 0 0 1rem;
+  color: #047857;
+  font-size: 1.3rem;
+}
+
+.success-placeholder p {
+  margin: 0 0 1.5rem;
+  color: var(--text-muted);
+  font-size: 1.1rem;
+}
+
+.success-placeholder ul {
+  display: grid;
+  gap: 0.75rem;
+  max-width: 500px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  text-align: left;
+}
+
+.success-placeholder li {
+  background: white;
+  border-radius: 8px;
+  padding: 1rem;
+  border-left: 4px solid #10b981;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.success-stories {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.success-story {
+  background: white;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(16, 185, 129, 0.2);
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  display: grid;
+  gap: 1rem;
+}
+
+.success-story__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+  gap: 1rem;
+}
+
+.success-story__title {
+  margin: 0;
+  color: #047857;
+  font-size: 1.2rem;
+}
+
+.success-story__date {
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  white-space: nowrap;
+}
+
+.success-story__details {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.success-detail {
+  background: rgba(16, 185, 129, 0.05);
+  border-radius: 6px;
+  padding: 0.75rem;
+}
+
+.success-detail__label {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 0.25rem;
+}
+
+.success-detail__value {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.success-story__notes {
+  margin: 0;
+  padding: 1rem;
+  background: rgba(16, 185, 129, 0.05);
+  border-radius: 6px;
+  color: var(--text-muted);
+  line-height: 1.6;
+  font-style: italic;
+}
+
+.hall-of-fame__stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.stat-card {
+  background: white;
+  border-radius: var(--radius-md);
+  padding: 1.5rem;
+  text-align: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid rgba(16, 185, 129, 0.1);
+}
+
+.stat-number {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #047857;
+  line-height: 1;
+  margin-bottom: 0.5rem;
+}
+
+.stat-label {
+  font-size: 0.9rem;
+  color: var(--text-muted);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Dark mode adjustments for Hall of Fame */
+@media (prefers-color-scheme: dark) {
+  .hall-of-fame {
+    background: linear-gradient(135deg, rgba(16, 185, 129, 0.1), rgba(5, 150, 105, 0.15));
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  
+  .hall-of-fame__intro h2 {
+    color: #34d399;
+  }
+  
+  .success-placeholder {
+    background: rgba(16, 185, 129, 0.1);
+    border-color: rgba(16, 185, 129, 0.4);
+  }
+  
+  .success-placeholder h3 {
+    color: #34d399;
+  }
+  
+  .success-placeholder li {
+    background: rgba(15, 23, 42, 0.8);
+    border-left-color: #34d399;
+  }
+  
+  .success-story {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(16, 185, 129, 0.3);
+  }
+  
+  .success-story__title {
+    color: #34d399;
+  }
+  
+  .success-detail {
+    background: rgba(16, 185, 129, 0.1);
+  }
+  
+  .success-story__notes {
+    background: rgba(16, 185, 129, 0.1);
+  }
+  
+  .stat-card {
+    background: rgba(15, 23, 42, 0.8);
+    border-color: rgba(16, 185, 129, 0.2);
+  }
+  
+  .stat-number {
+    color: #34d399;
   }
 }

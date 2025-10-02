@@ -1,0 +1,31 @@
+{
+  "name": "pathfinder-interface-testing",
+  "version": "1.0.0",
+  "description": "Interface testing suite with screenshot capture for Pathfinder job automation app",
+  "main": "screenshot-tester.js",
+  "scripts": {
+    "test": "node screenshot-tester.js test-all",
+    "test:single": "node screenshot-tester.js test-single",
+    "test:browser": "node -e \"require('./interface-tester.js')\"",
+    "install-deps": "npm install puppeteer",
+    "start": "node screenshot-tester.js"
+  },
+  "keywords": [
+    "testing",
+    "screenshot",
+    "automation",
+    "interface",
+    "validation"
+  ],
+  "author": "Pathfinder Development Team",
+  "license": "MIT",
+  "dependencies": {
+    "puppeteer": "^21.11.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

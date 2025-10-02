@@ -58,6 +58,72 @@
         <p class="loading">Loading job links…</p>
       </section>
 
+      <!-- Hall of Fame Section -->
+      <section class="hall-of-fame" id="hall-of-fame">
+        <header class="hall-of-fame__header">
+          <div class="hall-of-fame__intro">
+            <h2>🏆 Hall of Fame</h2>
+            <p>
+              Jobs where recruiters contacted you! Track successful applications to analyze 
+              what makes you get selected by humans.
+            </p>
+          </div>
+          <div class="hall-of-fame__actions">
+            <button 
+              type="button" 
+              class="btn-add-success" 
+              id="add-success-btn"
+              onclick="showAddSuccessModal()"
+            >
+              ➕ Add Success Story
+            </button>
+            <button 
+              type="button" 
+              class="btn-analyze" 
+              id="analyze-btn"
+              onclick="analyzeSuccessPatterns()"
+            >
+              📊 Analyze Patterns
+            </button>
+          </div>
+        </header>
+        
+        <div class="hall-of-fame__content" id="hall-of-fame-content">
+          <div class="success-stories" id="success-stories">
+            <!-- Success stories will be loaded here -->
+            <div class="success-placeholder">
+              <h3>🎯 Start Building Your Success Track Record</h3>
+              <p>When a recruiter contacts you, add it here to track what worked!</p>
+              <ul>
+                <li><strong>Which resume version?</strong> Track which CV got attention</li>
+                <li><strong>What job type?</strong> Identify your strongest market segments</li>
+                <li><strong>Which keywords?</strong> See what catches recruiter eyes</li>
+                <li><strong>Timeline patterns?</strong> Learn optimal application timing</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        
+        <div class="hall-of-fame__stats" id="hall-of-fame-stats">
+          <div class="stat-card">
+            <div class="stat-number" id="total-contacts">0</div>
+            <div class="stat-label">Recruiter Contacts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="response-rate">0%</div>
+            <div class="stat-label">Response Rate</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="top-resume">-</div>
+            <div class="stat-label">Top Resume</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number" id="avg-time">-</div>
+            <div class="stat-label">Avg Response Time</div>
+          </div>
+        </div>
+      </section>
+
       <section
         class="resume-viewer resume-viewer--collapsed"
         aria-label="Résumé library"

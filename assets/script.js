@@ -268,51 +268,35 @@
       return '';
     }
 
-    const locations = Array.isArray(job.locations)
-      ? job.locations.filter((item) => item && item.toString().trim())
-      : [];
     const focusAreas = Array.isArray(job.focusAreas)
       ? job.focusAreas.filter((item) => item && item.toString().trim())
       : [];
 
-    const locationBadges = locations.length
-      ? `<div class="job-card__meta">${createBadgeGroup(
-          locations,
-          'badge badge--location',
-        )}</div>`
-      : '';
-
+    // Merge all focus areas into a single line with comma separation
     const focusBadges = focusAreas.length
-      ? `<div class="job-card__meta">${createBadgeGroup(focusAreas)}</div>`
+      ? `<div class="job-card__keywords">${focusAreas.join(', ')}</div>`
       : '';
 
     const resumeInfo = job.resume ? resumeIndex.find(job.resume) : null;
     const resumeTarget = resumeInfo ? resumeInfo.id : job.resume;
-    const resumeLabel = resumeInfo ? resumeInfo.name : job.resume;
-
-    const resumeBlock =
-      resumeLabel && resumeTarget
-        ? `<div class="job-card__resume">
-            ${createResumeButton(resumeTarget, resumeLabel, {
-              ariaLabel: resumeLabel ? `View the ${resumeLabel} résumé` : 'View résumé',
-            })}
-          </div>`
-        : '';
 
     const jobUrl = typeof job.url === 'string' && job.url.trim() ? job.url.trim() : '';
     const safeJobUrl = jobUrl ? escapeHtml(jobUrl) : '';
     const title = escapeHtml(job.title || 'Curated job search');
-    const summary = escapeHtml(job.summary || '');
-    const titleContent = jobUrl
-      ? `<a class="job-card__title-link" href="${safeJobUrl}" target="_blank" rel="noopener noreferrer">${title}</a>`
-      : title;
+
+    // Make title clickable to open resume if available, otherwise open job URL
+    let titleContent;
+    if (resumeTarget) {
+      titleContent = `<button type="button" class="job-card__title-button" data-resume-target="${escapeHtml(resumeTarget)}">${title}</button>`;
+    } else if (jobUrl) {
+      titleContent = `<a class="job-card__title-link" href="${safeJobUrl}" target="_blank" rel="noopener noreferrer">${title}</a>`;
+    } else {
+      titleContent = title;
+    }
 
     return `
       <article class="job-card">
-        ${locationBadges}
         <h3 class="job-card__title">${titleContent}</h3>
-        <p class="job-card__summary">${summary}</p>
-        ${resumeBlock}
         ${focusBadges}
       </article>
     `;
@@ -615,6 +599,350 @@
       }
     });
   };
+
+  // Hall of Fame Functionality
+  const HALL_OF_FAME_KEY = 'pathfinder_hall_of_fame';
+  
+  const loadSuccessStories = () => {
+    try {
+      const stored = localStorage.getItem(HALL_OF_FAME_KEY);
+      return stored ? JSON.parse(stored) : [];
+    } catch (error) {
+      console.error('Error loading success stories:', error);
+      return [];
+    }
+  };
+  
+  const saveSuccessStories = (stories) => {
+    try {
+      localStorage.setItem(HALL_OF_FAME_KEY, JSON.stringify(stories));
+    } catch (error) {
+      console.error('Error saving success stories:', error);
+    }
+  };
+  
+  const renderHallOfFame = () => {
+    const hallOfFameContent = document.querySelector('.hall-of-fame__content');
+    if (!hallOfFameContent) return;
+    
+    const stories = loadSuccessStories();
+    
+    if (stories.length === 0) {
+      hallOfFameContent.innerHTML = `
+        <div class="success-placeholder">
+          <h3>🏆 Your Success Journey Starts Here</h3>
+          <p>This is the session i got contact by recruiter so i can analyze what makes me get selected by human</p>
+          <ul>
+            <li><strong>Track Recruiter Contacts:</strong> Record when recruiters reach out to you</li>
+            <li><strong>Analyze Success Patterns:</strong> See which resumes and approaches work best</li>
+            <li><strong>Optimize Your Strategy:</strong> Use data to improve your job hunting effectiveness</li>
+            <li><strong>Celebrate Wins:</strong> Keep motivation high by tracking your progress</li>
+          </ul>
+        </div>
+      `;
+    } else {
+      const stats = calculateStats(stories);
+      const statsHtml = `
+        <div class="hall-of-fame__stats">
+          <div class="stat-card">
+            <div class="stat-number">${stories.length}</div>
+            <div class="stat-label">Total Contacts</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${stats.uniqueCompanies}</div>
+            <div class="stat-label">Companies</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${stats.topResume || 'N/A'}</div>
+            <div class="stat-label">Top Resume</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-number">${stats.avgResponseTime}</div>
+            <div class="stat-label">Avg Response</div>
+          </div>
+        </div>
+      `;
+      
+      const storiesHtml = stories
+        .sort((a, b) => new Date(b.date) - new Date(a.date))
+        .map(story => `
+          <div class="success-story">
+            <div class="success-story__header">
+              <h3 class="success-story__title">${escapeHtml(story.company)} - ${escapeHtml(story.position)}</h3>
+              <span class="success-story__date">${new Date(story.date).toLocaleDateString()}</span>
+            </div>
+            <div class="success-story__details">
+              <div class="success-detail">
+                <div class="success-detail__label">Resume Used</div>
+                <div class="success-detail__value">${escapeHtml(story.resumeUsed)}</div>
+              </div>
+              <div class="success-detail">
+                <div class="success-detail__label">Application Date</div>
+                <div class="success-detail__value">${new Date(story.applicationDate).toLocaleDateString()}</div>
+              </div>
+              <div class="success-detail">
+                <div class="success-detail__label">Response Time</div>
+                <div class="success-detail__value">${story.responseTime || 'Not specified'}</div>
+              </div>
+              <div class="success-detail">
+                <div class="success-detail__label">Contact Method</div>
+                <div class="success-detail__value">${escapeHtml(story.contactMethod)}</div>
+              </div>
+            </div>
+            ${story.notes ? `<p class="success-story__notes">"${escapeHtml(story.notes)}"</p>` : ''}
+          </div>
+        `).join('');
+      
+      hallOfFameContent.innerHTML = `
+        ${statsHtml}
+        <div class="success-stories">
+          ${storiesHtml}
+        </div>
+      `;
+    }
+  };
+  
+  const calculateStats = (stories) => {
+    const companies = new Set(stories.map(s => s.company));
+    const resumes = stories.reduce((acc, story) => {
+      acc[story.resumeUsed] = (acc[story.resumeUsed] || 0) + 1;
+      return acc;
+    }, {});
+    
+    const topResume = Object.keys(resumes).reduce((a, b) => 
+      resumes[a] > resumes[b] ? a : b, 'N/A'
+    );
+    
+    const avgResponseTime = stories.length > 0 
+      ? Math.round(stories.reduce((sum, story) => {
+          const appDate = new Date(story.applicationDate);
+          const contactDate = new Date(story.date);
+          const days = Math.ceil((contactDate - appDate) / (1000 * 60 * 60 * 24));
+          return sum + days;
+        }, 0) / stories.length) + ' days'
+      : 'N/A';
+    
+    return {
+      uniqueCompanies: companies.size,
+      topResume: topResume.replace(/^.*[\\\/]/, '').replace(/\.(docx?|pdf)$/i, ''),
+      avgResponseTime
+    };
+  };
+  
+  window.showAddSuccessModal = () => {
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal">
+        <div class="modal-header">
+          <h2>🎉 Add Success Story</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <form id="success-form">
+            <div class="form-group">
+              <label for="company">Company Name *</label>
+              <input type="text" id="company" required placeholder="e.g., Google, Microsoft">
+            </div>
+            
+            <div class="form-group">
+              <label for="position">Position *</label>
+              <input type="text" id="position" required placeholder="e.g., Software Engineer, Data Analyst">
+            </div>
+            
+            <div class="form-group">
+              <label for="resumeUsed">Resume Used *</label>
+              <select id="resumeUsed" required>
+                <option value="">Select resume...</option>
+                ${resumeLibrary.map(resume => 
+                  `<option value="${escapeHtml(resume.name)}">${escapeHtml(resume.name)}</option>`
+                ).join('')}
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="applicationDate">Application Date *</label>
+              <input type="date" id="applicationDate" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="contactDate">Contact Date *</label>
+              <input type="date" id="contactDate" required>
+            </div>
+            
+            <div class="form-group">
+              <label for="contactMethod">Contact Method *</label>
+              <select id="contactMethod" required>
+                <option value="">Select method...</option>
+                <option value="Email">Email</option>
+                <option value="LinkedIn">LinkedIn</option>
+                <option value="Phone Call">Phone Call</option>
+                <option value="Indeed Message">Indeed Message</option>
+                <option value="Company Portal">Company Portal</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            <div class="form-group">
+              <label for="notes">Notes (Optional)</label>
+              <textarea id="notes" rows="3" placeholder="Any insights about what made this application successful..."></textarea>
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel">Cancel</button>
+          <button type="submit" form="success-form" class="btn-submit">Add Success Story</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    // Set default dates
+    const today = new Date().toISOString().split('T')[0];
+    modal.querySelector('#contactDate').value = today;
+    
+    // Form submission
+    modal.querySelector('#success-form').addEventListener('submit', (e) => {
+      e.preventDefault();
+      
+      const formData = new FormData(e.target);
+      const story = {
+        id: Date.now().toString(),
+        company: formData.get('company'),
+        position: formData.get('position'),
+        resumeUsed: formData.get('resumeUsed'),
+        applicationDate: formData.get('applicationDate'),
+        date: formData.get('contactDate'),
+        contactMethod: formData.get('contactMethod'),
+        notes: formData.get('notes'),
+        addedAt: new Date().toISOString()
+      };
+      
+      const stories = loadSuccessStories();
+      stories.push(story);
+      saveSuccessStories(stories);
+      
+      modal.remove();
+      renderHallOfFame();
+      
+      // Show success notification
+      showNotification('🎉 Success story added! Great job tracking your progress.', 'success');
+    });
+    
+    // Close handlers
+    modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+    modal.querySelector('.btn-cancel').addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.remove();
+    });
+  };
+  
+  window.analyzeSuccessPatterns = () => {
+    const stories = loadSuccessStories();
+    
+    if (stories.length === 0) {
+      showNotification('📊 Add some success stories first to analyze patterns!', 'info');
+      return;
+    }
+    
+    // Analyze patterns
+    const patterns = {
+      resumeSuccess: {},
+      timePatterns: {},
+      contactMethods: {},
+      companyTypes: {}
+    };
+    
+    stories.forEach(story => {
+      // Resume effectiveness
+      patterns.resumeSuccess[story.resumeUsed] = (patterns.resumeSuccess[story.resumeUsed] || 0) + 1;
+      
+      // Response time patterns
+      const appDate = new Date(story.applicationDate);
+      const contactDate = new Date(story.date);
+      const days = Math.ceil((contactDate - appDate) / (1000 * 60 * 60 * 24));
+      const timeRange = days <= 7 ? '1-7 days' : days <= 14 ? '8-14 days' : days <= 30 ? '15-30 days' : '30+ days';
+      patterns.timePatterns[timeRange] = (patterns.timePatterns[timeRange] || 0) + 1;
+      
+      // Contact methods
+      patterns.contactMethods[story.contactMethod] = (patterns.contactMethods[story.contactMethod] || 0) + 1;
+    });
+    
+    const modal = document.createElement('div');
+    modal.className = 'modal-overlay';
+    modal.innerHTML = `
+      <div class="modal" style="max-width: 700px;">
+        <div class="modal-header">
+          <h2>📊 Success Pattern Analysis</h2>
+          <button class="modal-close">&times;</button>
+        </div>
+        <div class="modal-body">
+          <div style="display: grid; gap: 2rem;">
+            <div>
+              <h3>🏆 Most Effective Resumes</h3>
+              ${Object.entries(patterns.resumeSuccess)
+                .sort(([,a], [,b]) => b - a)
+                .map(([resume, count]) => `
+                  <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                    <span>${escapeHtml(resume)}</span>
+                    <strong>${count} contacts</strong>
+                  </div>
+                `).join('')}
+            </div>
+            
+            <div>
+              <h3>⏱️ Response Time Patterns</h3>
+              ${Object.entries(patterns.timePatterns)
+                .sort(([,a], [,b]) => b - a)
+                .map(([timeRange, count]) => `
+                  <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                    <span>${timeRange}</span>
+                    <strong>${count} contacts</strong>
+                  </div>
+                `).join('')}
+            </div>
+            
+            <div>
+              <h3>📞 Contact Method Distribution</h3>
+              ${Object.entries(patterns.contactMethods)
+                .sort(([,a], [,b]) => b - a)
+                .map(([method, count]) => `
+                  <div style="display: flex; justify-content: space-between; padding: 0.5rem 0; border-bottom: 1px solid #e2e8f0;">
+                    <span>${escapeHtml(method)}</span>
+                    <strong>${count} contacts</strong>
+                  </div>
+                `).join('')}
+            </div>
+            
+            <div style="background: rgba(16, 185, 129, 0.1); padding: 1rem; border-radius: 8px; border-left: 4px solid #10b981;">
+              <h4 style="margin: 0 0 0.5rem; color: #047857;">💡 Key Insights</h4>
+              <ul style="margin: 0; padding-left: 1.5rem;">
+                <li>Your most successful resume: <strong>${Object.keys(patterns.resumeSuccess).reduce((a, b) => patterns.resumeSuccess[a] > patterns.resumeSuccess[b] ? a : b)}</strong></li>
+                <li>Most common response time: <strong>${Object.keys(patterns.timePatterns).reduce((a, b) => patterns.timePatterns[a] > patterns.timePatterns[b] ? a : b)}</strong></li>
+                <li>Primary contact method: <strong>${Object.keys(patterns.contactMethods).reduce((a, b) => patterns.contactMethods[a] > patterns.contactMethods[b] ? a : b)}</strong></li>
+                <li>Total success rate: <strong>${stories.length} recruiter contacts</strong></li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-cancel">Close</button>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(modal);
+    
+    modal.querySelector('.modal-close').addEventListener('click', () => modal.remove());
+    modal.querySelector('.btn-cancel').addEventListener('click', () => modal.remove());
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) modal.remove();
+    });
+  };
+  
+  // Initialize Hall of Fame on page load
+  renderHallOfFame();
 
   refresh();
   setInterval(refresh, REFRESH_INTERVAL_MS);
