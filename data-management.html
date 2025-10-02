@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Resume & Data Management · Pathfinder</title>
+    <link rel="stylesheet" href="assets/styles.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <header class="hero">
+      <div class="hero__content">
+        <p class="hero__eyebrow">Data Management</p>
+        <h1>Resume & Folder Management</h1>
+        <p class="hero__subtitle">
+          Manage your resume library, monitor data folder updates, and configure
+          automatic detection of new resume versions. The system automatically
+          uses the highest numbered data folder (data1002 to data1003).
+        </p>
+        <div class="hero__actions">
+          <button class="hero__action hero__action--primary" id="refresh-data" onclick="refreshDataFolders()">
+            🔄 Refresh Data Folders
+          </button>
+          <a class="hero__action" href="index.html">Back to Job Links</a>
+          <a class="hero__action hero__action--secondary" href="cover-letter.html">Cover Letter Studio</a>
+        </div>
+      </div>
+    </header>
+
+    <main class="layout">
+      <!-- Current Data Status -->
+      <section class="data-status" id="data-status">
+        <header class="data-status__header">
+          <div>
+            <h2>Current Data Status</h2>
+            <p>Overview of your current resume library and data folder configuration.</p>
+          </div>
+        </header>
+        
+        <div class="data-status__grid">
+          <div class="status-card">
+            <div class="status-card__icon">📁</div>
+            <div class="status-card__content">
+              <h3>Active Data Folder</h3>
+              <p id="current-folder">Loading...</p>
+              <small id="folder-date">Checking date...</small>
+            </div>
+          </div>
+          
+          <div class="status-card">
+            <div class="status-card__icon">📄</div>
+            <div class="status-card__content">
+              <h3>Resume Count</h3>
+              <p id="resume-count">Loading...</p>
+              <small>Active resume variants</small>
+            </div>
+          </div>
+          
+          <div class="status-card">
+            <div class="status-card__icon">📮</div>
+            <div class="status-card__content">
+              <h3>Cover Letters</h3>
+              <p id="cover-letter-count">Loading...</p>
+              <small>Template variations</small>
+            </div>
+          </div>
+          
+          <div class="status-card">
+            <div class="status-card__icon">🔄</div>
+            <div class="status-card__content">
+              <h3>Auto-Detection</h3>
+              <p id="auto-detection-status">Enabled</p>
+              <small>Checks every 30 seconds</small>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Available Data Folders -->
+      <section class="data-folders" id="data-folders">
+        <header class="data-folders__header">
+          <div>
+            <h2>Available Data Folders</h2>
+            <p>All detected data folders sorted by date (newest first).</p>
+          </div>
+          <button class="btn-secondary" onclick="scanForNewFolders()">🔍 Scan for New Folders</button>
+        </header>
+        
+        <div class="folder-list" id="folder-list">
+          <div class="folder-item loading">
+            <p>Scanning for data folders...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Resume Library Overview -->
+      <section class="resume-overview" id="resume-overview">
+        <header class="resume-overview__header">
+          <div>
+            <h2>Resume Library Overview</h2>
+            <p>Current resumes from the active data folder with focus areas and last modified dates.</p>
+          </div>
+          <div class="overview-actions">
+            <button class="btn-secondary" onclick="exportResumeData()">📊 Export Data</button>
+            <button class="btn-secondary" onclick="previewAllResumes()">👀 Preview All</button>
+          </div>
+        </header>
+        
+        <div class="resume-grid" id="resume-grid">
+          <div class="resume-card loading">
+            <p>Loading resume library...</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Data Folder Actions -->
+      <section class="folder-actions" id="folder-actions">
+        <header class="folder-actions__header">
+          <div>
+            <h2>Data Folder Actions</h2>
+            <p>Manage and configure your data folder automation settings.</p>
+          </div>
+        </header>
+        
+        <div class="actions-grid">
+          <div class="action-card">
+            <h3>🆕 Create New Data Folder</h3>
+            <p>Create a new dated folder for updated resumes and cover letters.</p>
+            <div class="action-form">
+              <input type="text" id="new-folder-name" placeholder="data1003" />
+              <button onclick="createNewDataFolder()">Create Folder</button>
+            </div>
+          </div>
+          
+          <div class="action-card">
+            <h3>📋 Copy Current Data</h3>
+            <p>Copy all files from the current data folder to a new one.</p>
+            <button onclick="copyCurrentData()">Copy to New Folder</button>
+          </div>
+          
+          <div class="action-card">
+            <h3>🔄 Force Refresh</h3>
+            <p>Force reload the resume library from the latest folder.</p>
+            <button onclick="forceRefreshLibrary()">Force Refresh</button>
+          </div>
+          
+          <div class="action-card">
+            <h3>⚙️ Auto-Detection Settings</h3>
+            <p>Configure automatic folder detection frequency.</p>
+            <select id="detection-frequency">
+              <option value="30">Every 30 seconds</option>
+              <option value="60">Every minute</option>
+              <option value="300">Every 5 minutes</option>
+              <option value="600">Every 10 minutes</option>
+              <option value="0">Disabled</option>
+            </select>
+            <button onclick="updateDetectionSettings()">Update</button>
+          </div>
+        </div>
+      </section>
+
+      <!-- System Logs -->
+      <section class="system-logs" id="system-logs">
+        <header class="system-logs__header">
+          <div>
+            <h2>System Activity Log</h2>
+            <p>Recent folder detection and resume library update activities.</p>
+          </div>
+          <button class="btn-secondary" onclick="clearLogs()">🗑️ Clear Logs</button>
+        </header>
+        
+        <div class="log-container" id="log-container">
+          <div class="log-entry">
+            <span class="log-time">Loading...</span>
+            <span class="log-message">Initializing system logs...</span>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      <p>
+        Data Management System automatically detects new resume versions and switches to the latest folder.
+        All job applications will use resumes from the currently active data folder.
+      </p>
+    </footer>
+
+    <script src="assets/resumes-dynamic.js" defer></script>
+    <script src="assets/data-management.js" defer></script>
+  </body>
+</html>
